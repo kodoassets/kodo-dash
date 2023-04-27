@@ -1,14 +1,48 @@
-import { getProperties } from "@/queries/get-properties";
-import { useQuery } from "@tanstack/react-query";
+import { initVerification } from "@/data/mutations/init-verification";
+import { getProperties } from "@/data/queries/get-properties";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { Web3Button } from "@web3modal/react";
-import { useState } from "react";
-import { useAccount } from "wagmi";
+import { useEffect, useRef, useState } from "react";
+import { useAccount, useSignMessage } from "wagmi";
 
 const LoginWall = () => {
-  const [signedMessage, setSignedMessage] = useState("");
+  const [nonce, setNonce] = useState("");
   const { address, isConnecting, isDisconnected } = useAccount();
 
+  const {
+    data: signedMessage,
+    isError,
+    isLoading,
+    isSuccess,
+    signMessage,
+  } = useSignMessage({
+    message: nonce,
+  });
+
+  const mutation = useMutation({
+    mutationFn: (address: string) => initVerification(address),
+    onSuccess: (data, error) => {
+      if (data?.data?.nonce) {
+        setNonce(data?.data?.nonce);
+      }
+    },
+  });
+
+  const isMutationRunning = useRef(false);
   const isAdmin = false;
+
+  useEffect(() => {
+    if (isSuccess) {
+    }
+  });
+
+  useEffect(() => {
+    if (!address || mutation.isLoading || isMutationRunning.current) return;
+
+    isMutationRunning.current = true;
+    mutation.mutate(address);
+  }, [address, mutation]);
+
   const getMessage = () => {
     if (!address) {
       return `Connect your wallet to continue...`;
@@ -27,8 +61,21 @@ const LoginWall = () => {
       <div className="bg-[url('/imgs/login_wall_bg.png')] bg-cover bg-no-repeat h-full text-white">
         <div className="fixed w-full h-full bg-zinc-800 opacity-80" />
         <div className="w-full h-full backdrop-blur-md flex flex-col items-center justify-center">
-          <p className="text-3xl mb-4">{getMessage()}</p>
-          <Web3Button />
+          <p className="text-3xl mb-4" suppressHydrationWarning={true}>
+            {getMessage()}
+          </p>
+          {!address && <Web3Button />}
+          {address && nonce && !signedMessage && (
+            <button
+              onClick={() =>
+                signMessage({
+                  message: nonce,
+                })
+              }
+            >
+              Sign
+            </button>
+          )}
         </div>
         /
       </div>

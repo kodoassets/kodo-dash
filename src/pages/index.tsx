@@ -7,11 +7,50 @@ import Card from "@/components/Card";
 import LabeledValue from "@/components/DataView/LabeledValue";
 import PaymentMethodsStacked from "@/components/PaymentMethodsStacked";
 import LoginWall from "@/components/LoginWall";
+import { useAccount } from "wagmi";
+import Transaction from "@/components/Transaction";
 
 export default function Home() {
-  const connectedWallet = "";
-  if (!connectedWallet) return <LoginWall />;
+  const { address } = useAccount();
+  console.log(address);
+  if (!address || address !== "0x8Dc4D04c9646a410580a47660e2D11a8E3D91d69")
+    return <LoginWall />;
 
+  const orders = [
+    {
+      id: "1",
+      date: new Date().toISOString(),
+      amountInUsd: 140,
+      tokenAmount: 1,
+      tokenSymbol: "KODO1",
+      user: {
+        email: "andre.daher@cryptum.io",
+        wallet: "0x8Dc4D04c9646a410580a47660e2D11a8E3D91d69",
+      },
+    },
+    {
+      id: "2",
+      date: new Date().toISOString(),
+      amountInUsd: 210,
+      tokenAmount: 1.5,
+      tokenSymbol: "KODO1",
+      user: {
+        email: "andre.daher@cryptum.io",
+        wallet: "0x8Dc4D04c9646a410580a47660e2D11a8E3D91d69",
+      },
+    },
+    {
+      id: "3",
+      date: new Date().toISOString(),
+      amountInUsd: 280,
+      tokenAmount: 2,
+      tokenSymbol: "KODO1",
+      user: {
+        email: "andre.daher@cryptum.io",
+        wallet: "0x8Dc4D04c9646a410580a47660e2D11a8E3D91d69",
+      },
+    },
+  ];
   return (
     <div className="flex flex-row min-h-screen">
       <Sidenav />
@@ -31,8 +70,18 @@ export default function Home() {
           <Card className="h-72 flex flex-row justify-center mt-4">
             <PaymentMethodsStacked />
           </Card>
-          <Card className="h-72 flex flex-row justify-center mt-4">
-            <p>transactions</p>
+          <Card className="h-72 flex flex-row mt-4">
+            <div className="w-full">
+              <div className="grid grid-cols-4 w-full items-center justify-center text-center py-4 border-b bg-gray-100">
+                <span>Date</span>
+                <span>Email</span>
+                <span>Amount</span>
+                <span>Link</span>
+              </div>
+              {orders.map((o) => (
+                <Transaction key={o.id} {...o} />
+              ))}
+            </div>
           </Card>
         </Scaffold>
       </div>

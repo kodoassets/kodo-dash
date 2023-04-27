@@ -1,15 +1,19 @@
+import { IconType } from "react-icons";
+
 interface Props {
   text: string;
   active?: boolean;
+  icon?: React.ReactElement;
 }
-const NavLink = ({ text, active }: Props) => {
+const NavLink = ({ text, active, icon }: Props) => {
   return (
     <a
-      className={`px-4 py-2 hover:bg-slate-500 hover:cursor-pointer text-gray-200 w-full ${
+      className={`px-4 py-4 hover:bg-slate-500 hover:cursor-pointer text-gray-200 w-full ${
         active ? "bg-slate-500 text-white" : ""
       }`}
     >
-      {text}
+      {icon}
+      <span className="ml-2">{text}</span>
     </a>
   );
 };

@@ -1,5 +1,6 @@
 import Image from "next/image";
 import NavLink from "./NavLink";
+import { FaBuilding, FaBook } from "react-icons/fa";
 
 interface LabelProps {
   text: string;
@@ -17,7 +18,12 @@ const Sidenav = () => {
         <Image src="/svgs/logo.svg" alt="logo" width={100} height={100} />
       </div>
       <Label text="dashboard" />
-      <NavLink active text="Offerings" />
+      <NavLink
+        active
+        text="Offerings"
+        icon={<FaBuilding className="inline" />}
+      />
+      <NavLink text="Academy" icon={<FaBook className="inline" />} />
     </div>
   );
 };
