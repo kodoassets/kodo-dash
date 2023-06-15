@@ -51,7 +51,7 @@ const NewOfferingPage = () => {
   ];
 
   return (
-    <Scaffold>
+    <Scaffold title="Offerings">
       <h1 className="text-xl">New offering</h1>
       <Card className="p-4 mt-4">
         <h2 className="font-bold">1. Token details</h2>
@@ -155,7 +155,7 @@ const NewOfferingPage = () => {
                       {displayPropertiesList.map((option, index) => (
                         <div
                           key={index}
-                          className="assetsCard  xl:min-w-[528px] flex flex-col items-start rounded-[16px] px-[16px] py-[16px] text-start"
+                          className="bg-gradient xl:min-w-[528px] flex flex-col items-start rounded-[16px] px-[16px] py-[16px] text-start"
                         >
                           <div className="space-x-4 flex items-start">
                             <span className="text-primaryBlue font-bold text-[14px] tracking-[-0.25em]">
@@ -199,7 +199,7 @@ const NewOfferingPage = () => {
                   {displayPropertiesList.map((option, index) => (
                     <div
                       key={index}
-                      className="assetsCard h-[70px] xl:min-w-[528px] flex items-center rounded-[16px] px-[20px] py-[16px] justify-between"
+                      className="bg-gradient h-[70px] xl:min-w-[528px] flex items-center rounded-[16px] px-[20px] py-[16px] justify-between"
                     >
                       <div className="space-x-4 flex items-center">
                         <span className="text-primaryBlue font-bold text-[18px] tracking-[-0.25em]">

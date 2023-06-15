@@ -27,7 +27,7 @@ body {
     rgb(var(--background-start-rgb));
 }
 
-.assetsCard {
+.bg-gradient {
   background: linear-gradient(
     90deg,
     rgba(0, 174, 239, 0.08) 0%,

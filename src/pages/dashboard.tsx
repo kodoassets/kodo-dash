@@ -44,7 +44,7 @@ export default function Home() {
   });
 
   return (
-    <Scaffold>
+    <Scaffold title="Dashboard">
       <Card className="px-4 py-2 grid grid-cols-4 justify-between">
         <LabeledValue
           color="blue"
