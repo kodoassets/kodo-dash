@@ -25,3 +25,11 @@ body {
     )
     rgb(var(--background-start-rgb));
 }
+
+.assetsCard {
+  background: linear-gradient(
+    90deg,
+    rgba(0, 174, 239, 0.08) 0%,
+    rgba(26, 72, 89, 0.08) 100%
+  ) !important;
+}
