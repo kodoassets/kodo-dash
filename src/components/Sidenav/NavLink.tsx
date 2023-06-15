@@ -11,8 +11,8 @@ const NavLink = ({ text, active, icon, route }: Props) => {
   return (
     <a
       onClick={() => Router.push(route)}
-      className={`px-4 py-4 hover:bg-slate-500 hover:cursor-pointer text-gray-200 w-full ${
-        active ? "bg-slate-500 text-white" : ""
+      className={`px-4 py-4 text-sm hover:cursor-pointer hover:text-white text-[#7896A1] ml-8 mx-auto ${
+        active ? "text-white" : ""
       }`}
     >
       {icon}
