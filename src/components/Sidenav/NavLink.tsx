@@ -1,5 +1,4 @@
 import Router from "next/router";
-import { IconType } from "react-icons";
 
 interface Props {
   text: string;

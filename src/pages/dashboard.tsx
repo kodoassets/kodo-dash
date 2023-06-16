@@ -34,7 +34,7 @@ export default function Home() {
     queryKey: ["stats"],
     queryFn: () =>
       axios
-        .get("http://localhost:3002/backoffice/stats", {
+        .get("https://gateway-dev.kodoassets.com/backoffice/stats", {
           headers: {
             // "X-signed-message": signedMessage,
             "X-wallet-address": address,

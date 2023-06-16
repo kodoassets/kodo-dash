@@ -18,8 +18,8 @@ const Sidenav = () => {
         icon={<FaBuilding className="inline" />}
       />
       <NavLink
-        route="/offerings/new"
-        active={asPath === "/offerings/new"}
+        route="/offerings"
+        active={asPath === "/offerings"}
         text="Offerings"
         icon={<FaBuilding className="inline" />}
       />

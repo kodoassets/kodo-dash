@@ -1,5 +1,4 @@
 import { Web3Button } from "@web3modal/react";
-import { useState } from "react";
 import { useAccount } from "wagmi";
 import SignMessage from "./SignMessage";
 

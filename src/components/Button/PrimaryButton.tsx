@@ -24,11 +24,11 @@ const PrimaryButton = ({
     <button
       disabled
       type={submit ? "submit" : "button"}
-      className={`${className} bg-primary text-secondary rounded-full text-sm lg:text-md align-center px-7 py-3 lg:py-3 lg:px-8`}
+      className={`${className} bg-primaryBlue text-white font-light rounded-full hover:gradient text-xs px-6 py-2 `}
     >
       <svg
         role="status"
-        className="inline mr-2 w-4 h-4 text-white animate-spin"
+        className="inline w-4 h-4 text-white animate-spin"
         viewBox="0 0 100 101"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
@@ -42,7 +42,6 @@ const PrimaryButton = ({
           fill="#000"
         />
       </svg>
-      One moment...
     </button>
   ) : (
     <motion.button
@@ -50,9 +49,10 @@ const PrimaryButton = ({
       whileHover={{ scale: disabled ? 1 : 1.02 }}
       whileTap={{ scale: 0.9 }}
       className={clsx(
+        "text-xs px-6 py-2 ",
         disabled
-          ? "bg-[rgba(0,0,0,0.1)] text-[rgba(255,255,255,0.2)] rounded-full text-sm lg:text-md align-center px-7 py-3 lg:py-3 lg:px-10"
-          : "bg-primaryBlue text-white font-light rounded-full text-sm lg:text-md align-center px-7 py-3 lg:py-3 lg:px-8 hover:gradient",
+          ? "bg-[rgba(0,0,0,0.1)] text-[rgba(255,255,255,0.2)] rounded-full align-center"
+          : "bg-primaryBlue text-white font-light rounded-full align-center hover:gradient",
         className
       )}
       onClick={onClick}
