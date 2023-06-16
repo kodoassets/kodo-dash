@@ -31,7 +31,6 @@ export default function Home() {
   // }, [signedMessage, walletAddress]);
 
   const { data } = useQuery(["stats"], {
-    queryKey: ["stats"],
     queryFn: () =>
       axios
         .get("https://gateway-dev.kodoassets.com/backoffice/stats", {
