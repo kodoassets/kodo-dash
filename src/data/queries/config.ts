@@ -1,1 +1,1 @@
-export const apiUrl = "https://gateway-dev.kodoassets.com";
+export const apiUrl = process.env.NEXT_PUBLIC_API_URL;

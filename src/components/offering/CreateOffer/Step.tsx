@@ -11,10 +11,7 @@ interface Props {
 const Step = ({ title, stepNumber, children, active }: Props) => {
   return (
     <Card
-      className={clsx(
-        "py-4 px-8 mt-4 w-full max-w-[320px] mr-8",
-        !active && "opacity-40"
-      )}
+      className={clsx("py-4 px-8 mt-4 w-full mr-8", !active && "opacity-40")}
     >
       <div className="text-center">
         <p className="text-xl font-bold">{stepNumber}</p>

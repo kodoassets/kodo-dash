@@ -33,7 +33,7 @@ export default function Home() {
   const { data } = useQuery(["stats"], {
     queryFn: () =>
       axios
-        .get("https://gateway-dev.kodoassets.com/backoffice/stats", {
+        .get(`${process.env.NEXT_PUBLIC_API_URL}/backoffice/stats`, {
           headers: {
             // "X-signed-message": signedMessage,
             "X-wallet-address": address,
