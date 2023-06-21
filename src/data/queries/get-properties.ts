@@ -68,7 +68,6 @@ export const getOfferingSpecification: () => Promise<
 };
 
 export const getPropertyById = async (id: string) => {
-  console.log(apiUrl + `/backoffice/properties/${id}`);
   const data = await fetch(apiUrl + `/backoffice/properties/${id}`);
   return data.json();
 };

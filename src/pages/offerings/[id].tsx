@@ -19,7 +19,6 @@ const PropertyPage = () => {
   const { data: steps } = useQuery(["specification"], () =>
     getOfferingSpecification()
   );
-  console.log("Query", router.query);
   const { data: property, refetch } = useQuery(
     [PropertyByIdQueryKey],
     () => getPropertyById(router.query.id as string),

@@ -28,7 +28,6 @@ const NewOfferingPage = () => {
       Router.push("/offerings");
     } catch (e) {
       setCreatePropertyLoading(false);
-      console.log(e);
     }
 
     setCreatePropertyLoading(false);
