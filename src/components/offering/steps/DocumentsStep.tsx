@@ -6,8 +6,11 @@ import {
   ConfigurationStepStatus,
   Property,
 } from "@/data/queries/get-properties";
+import { PropertyByIdQueryKey } from "@/pages/offerings/[id]";
+import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 import { useState } from "react";
+import { toast } from "react-toastify";
 
 interface Props {
   property: Property;
@@ -22,6 +25,7 @@ const DocumentsStep = ({
 }: Props) => {
   const router = useRouter();
   const propertyId = router.query.id as string;
+  const queryClient = useQueryClient();
 
   const [savingDocusignConfig, setSavingDocusignConfig] = useState(false);
 
@@ -83,6 +87,10 @@ const DocumentsStep = ({
               accountId,
               clickwrapId,
               environment,
+            });
+            toast.success("Docusign configuration saved");
+            queryClient.invalidateQueries({
+              queryKey: [PropertyByIdQueryKey, { id: propertyId }],
             });
           } finally {
             setSavingDocusignConfig(false);
