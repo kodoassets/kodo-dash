@@ -47,6 +47,11 @@ export interface Property {
   tokenPriceInUsd: string;
   totalAreaSquareMeters: string;
   configurationSteps: ConfigurationStepStatus[];
+  docusignConfig?: {
+    clickwrapId: string;
+    accountId: string;
+    environment: string;
+  };
 }
 
 export const getProperties: () => Promise<Property[]> = async () => {

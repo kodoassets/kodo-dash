@@ -12,7 +12,6 @@ interface Props {
 }
 
 const TokenStep = ({ property, specification, validationResult }: Props) => {
-  console.log(property);
   return (
     <div>
       <TextInput
