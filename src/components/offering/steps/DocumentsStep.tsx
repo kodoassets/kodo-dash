@@ -1,6 +1,7 @@
 import PrimaryButton from "@/components/Button/PrimaryButton";
 import TextInput from "@/components/TextInput";
 import { putDocusignConfig } from "@/data/mutations/put-docusign-config";
+import { putWhitepaperUrl } from "@/data/mutations/put-whitepaper-url";
 import {
   ConfigurationSpecification,
   ConfigurationStepStatus,
@@ -28,6 +29,11 @@ const DocumentsStep = ({
   const queryClient = useQueryClient();
 
   const [savingDocusignConfig, setSavingDocusignConfig] = useState(false);
+  const [savingWhitepaper, setSavingWhitepaper] = useState(false);
+
+  const [whitepaperUrl, setWhitepaperUrl] = useState(
+    property.whitepaperUrl ?? ""
+  );
 
   const [accountId, setAccountId] = useState(
     property?.docusignConfig?.accountId ?? ""
@@ -90,10 +96,38 @@ const DocumentsStep = ({
             });
             toast.success("Docusign configuration saved");
             queryClient.invalidateQueries({
-              queryKey: [PropertyByIdQueryKey, { id: propertyId }],
+              queryKey: [PropertyByIdQueryKey],
             });
           } finally {
             setSavingDocusignConfig(false);
+          }
+        }}
+      />
+      <p className="mt-8 mb-2">Whitepaper</p>
+      <TextInput
+        label="Link to whitepaper"
+        value={whitepaperUrl}
+        onChange={setWhitepaperUrl}
+      />
+      <PrimaryButton
+        disabled={
+          !whitepaperUrl ||
+          savingWhitepaper ||
+          (!!property.whitepaperUrl && whitepaperUrl === property.whitepaperUrl)
+        }
+        isLoading={savingWhitepaper}
+        className="w-full mt-4"
+        text="Save"
+        onClick={async () => {
+          setSavingWhitepaper(true);
+          try {
+            await putWhitepaperUrl(propertyId, whitepaperUrl);
+            toast.success("Whitepaper link saved");
+            queryClient.invalidateQueries({
+              queryKey: [PropertyByIdQueryKey],
+            });
+          } finally {
+            setSavingWhitepaper(false);
           }
         }}
       />

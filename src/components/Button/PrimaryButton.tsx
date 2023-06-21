@@ -55,7 +55,7 @@ const PrimaryButton = ({
           : "bg-primaryBlue text-white font-light rounded-full align-center hover:gradient",
         className
       )}
-      onClick={onClick}
+      onClick={disabled ? () => {} : onClick}
     >
       {children ?? text}
     </motion.button>

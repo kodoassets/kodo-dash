@@ -23,7 +23,7 @@ const PropertyPage = () => {
   const { data: property, refetch } = useQuery(
     [PropertyByIdQueryKey],
     () => getPropertyById(router.query.id as string),
-    { enabled: !!router.query.id }
+    { enabled: !!router.query.id, refetchInterval: 1000 }
   );
 
   if (!steps || !property) return null;

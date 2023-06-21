@@ -52,6 +52,7 @@ export interface Property {
     accountId: string;
     environment: string;
   };
+  whitepaperUrl?: string;
 }
 
 export const getProperties: () => Promise<Property[]> = async () => {

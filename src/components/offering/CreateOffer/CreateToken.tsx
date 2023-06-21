@@ -1,7 +1,15 @@
 import TextInput from "@/components/TextInput";
+import { erc20abi } from "./abi";
 import Step from "./Step";
 import PrimaryButton from "@/components/Button/PrimaryButton";
 import { useState } from "react";
+import { Signer, ethers } from "ethers";
+import { bytecode } from "./bytecode";
+import { parseUnits } from "ethers/lib/utils.js";
+import { useAccount } from "wagmi";
+import { createProperty } from "@/data/mutations/create-property";
+import { toast } from "react-toastify";
+import Router from "next/router";
 
 export interface TokenInput {
   title: string;
@@ -15,7 +23,16 @@ interface Props {
   loading: boolean;
 }
 
+const deployContract = async (signer: Signer, tokenSymbol: string) => {
+  // TODO: limited supply
+  const factory = new ethers.ContractFactory(erc20abi, bytecode, signer);
+  const contract = await factory.deploy(tokenSymbol, tokenSymbol);
+  await contract.deployTransaction.wait();
+  return contract;
+};
+
 const CreateToken = ({ onSubmit, loading = false }: Props) => {
+  const [isDeploying, setIsDeploying] = useState(false);
   const [title, setTitle] = useState("");
   const [tokenSymbol, setSymbol] = useState("");
   const [tokenPriceInUsd, setTokenPriceInUsd] = useState("");
@@ -56,26 +73,45 @@ const CreateToken = ({ onSubmit, loading = false }: Props) => {
       <div className="text-center mt-4">
         <PrimaryButton
           disabled={
+            isDeploying ||
             !tokenSymbol ||
             !title ||
             !tokenPriceInUsd ||
             !totalSupply ||
             loading
           }
-          isLoading={loading}
+          isLoading={loading || isDeploying}
           text="Create token"
-          onClick={
-            !loading
-              ? () =>
-                  onSubmit({
-                    title,
+          onClick={async () => {
+            if (window.ethereum) {
+              setIsDeploying(true);
+              try {
+                const provider = new ethers.providers.Web3Provider(
+                  // @ts-ignore
+                  window.ethereum
+                );
+                const signer = provider.getSigner();
+                const contract = await deployContract(signer, tokenSymbol);
+                if (!contract) {
+                  toast.error("Failed to deploy contract");
+                  return;
+                }
+                await createProperty({
+                  title,
+                  contract: {
+                    contractAddress: contract.address,
                     tokenSymbol,
-                    tokenPriceInUsd,
                     totalSupply,
-                    contractAddress,
-                  })
-              : () => {}
-          }
+                  },
+                  tokenPriceInUsd,
+                });
+                Router.push("/offerings");
+              } catch (e) {
+              } finally {
+                setIsDeploying(false);
+              }
+            }
+          }}
         />
       </div>
     </Step>
