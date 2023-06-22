@@ -1,5 +1,6 @@
 import "@/styles/globals.css";
 import type { AppProps } from "next/app";
+import "react-toastify/dist/ReactToastify.css";
 
 import {
   EthereumClient,
@@ -10,6 +11,7 @@ import { Web3Modal } from "@web3modal/react";
 import { configureChains, createClient, WagmiConfig } from "wagmi";
 import { arbitrum, mainnet, polygon } from "wagmi/chains";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ToastContainer } from "react-toastify";
 
 const chains = [mainnet, polygon];
 const projectId = "YOUR_PROJECT_ID";
@@ -29,6 +31,7 @@ export default function App({ Component, pageProps }: AppProps) {
       <WagmiConfig client={wagmiClient}>
         <QueryClientProvider client={queryClient}>
           <Component {...pageProps} />
+          <ToastContainer />
         </QueryClientProvider>
       </WagmiConfig>
 

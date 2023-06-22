@@ -23,7 +23,7 @@ const TextInput = ({
         {label}
       </p>
       <input
-        value={value || undefined}
+        value={value}
         disabled={disabled}
         onChange={onChange ? (e) => onChange(e.target.value) : () => {}}
         className="border px-2 py-1 rounded-lg text-white bg-[#000F14] w-full"

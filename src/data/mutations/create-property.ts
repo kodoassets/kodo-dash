@@ -1,21 +1,18 @@
 import axios from "axios";
 
-export interface PropertyInput {
+export interface CreatePropertyInput {
   title: string;
-  description: string;
   contract: {
     tokenSymbol: string;
     totalSupply: string;
+    contractAddress: string;
   };
-  address: string;
-  totalAreaSquareMeters: string;
-  bomaAreaSquareMeters: string;
   tokenPriceInUsd: string;
 }
 
-export const createProperty = (property: PropertyInput) => {
+export const createProperty = (property: CreatePropertyInput) => {
   return axios.post(
-    "https://gateway-dev.kodoassets.com/backoffice/properties",
+    `${process.env.NEXT_PUBLIC_API_URL}/backoffice/properties`,
     {
       ...property,
     }
