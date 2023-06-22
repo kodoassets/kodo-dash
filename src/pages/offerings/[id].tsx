@@ -43,6 +43,8 @@ const PropertyPage = () => {
     (step: ConfigurationStepStatus) => step.status === "COMPLETE"
   );
 
+  if (!property.configurationSteps) return null;
+
   return (
     <Scaffold title="Edit offering">
       {/* {property.status !== "DRAFT" || allStepsFinished ? ( */}

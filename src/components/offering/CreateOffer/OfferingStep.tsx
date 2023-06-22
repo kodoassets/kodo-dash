@@ -14,7 +14,7 @@ import TextContentStep from "../steps/TextContentStep";
 interface Props {
   index: number;
   specification: ConfigurationSpecification;
-  validationResult: ConfigurationStepStatus;
+  validationResult?: ConfigurationStepStatus;
   property: Property;
 }
 
@@ -31,6 +31,7 @@ const OfferingStep = ({
   specification,
   validationResult,
 }: Props) => {
+  if (!validationResult) return null;
   return (
     <>
       <Card className="py-4 px-8 mt-4 mr-8 max-w-[640px]">
