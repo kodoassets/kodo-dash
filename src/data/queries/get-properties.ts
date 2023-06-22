@@ -23,6 +23,12 @@ export interface ConfigurationSpecification {
   validator: (property: Property) => ConfigurationStepStatus;
 }
 
+export type OfferingStatus =
+  | "DRAFT"
+  | "COMING_SOON"
+  | "ANNOUNCED"
+  | "SALE"
+  | "CLOSED";
 export interface Property {
   _id: string;
   address: string;
@@ -42,7 +48,7 @@ export interface Property {
   gallery: string[];
   slug: string;
   squareMetersByToken: string;
-  status: string;
+  status: OfferingStatus;
   title: string;
   tokenPriceInUsd: string;
   totalAreaSquareMeters: string;

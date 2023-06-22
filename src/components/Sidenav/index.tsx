@@ -23,7 +23,7 @@ const Sidenav = () => {
         text="Offerings"
         icon={<FaBuilding className="inline" />}
       />
-      <NavLink
+      {/* <NavLink
         route="/payments"
         active={asPath === "/offerings/new"}
         text="Payments"
@@ -33,7 +33,7 @@ const Sidenav = () => {
         route="/affiliates"
         text="Affiliates"
         icon={<FaBook className="inline" />}
-      />
+      /> */}
     </div>
   );
 };

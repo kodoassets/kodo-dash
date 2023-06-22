@@ -6,7 +6,7 @@ import {
   getOfferingSpecification,
   getPropertyById,
 } from "@/data/queries/get-properties";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 
 export const PropertyByIdQueryKey = "propertyById";
@@ -14,13 +14,11 @@ export const PropertyByIdQueryKey = "propertyById";
 const PropertyPage = () => {
   const router = useRouter();
 
-  const queryClient = useQueryClient();
-
   const { data: steps } = useQuery(["specification"], () =>
     getOfferingSpecification()
   );
-  const { data: property, refetch } = useQuery(
-    [PropertyByIdQueryKey],
+  const { data: property } = useQuery(
+    [PropertyByIdQueryKey, router.query.id],
     () => getPropertyById(router.query.id as string),
     { enabled: !!router.query.id, refetchInterval: 1000 }
   );
