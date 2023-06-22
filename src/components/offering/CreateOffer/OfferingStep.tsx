@@ -32,33 +32,35 @@ const OfferingStep = ({
   validationResult,
 }: Props) => {
   return (
-    <Card className="py-4 px-8 mt-4 mr-8 max-w-[640px]">
-      <div className="text-center">
-        <p className="text-xl font-bold">{index + 1}</p>
-        <h2 className="font-bold">{specification.label}</h2>
-        <p
-          className={clsx(
-            "mb-6",
-            validationResult.status === "INCOMPLETE"
-              ? "text-red-400"
-              : "text-green-200"
-          )}
-        >
-          {validationResult.status}
-        </p>
-      </div>
-      {validationResult.errors.map((error, index) => (
-        <p className="text-red-400 text-sm mb-1" key={error}>
-          *{error}
-        </p>
-      ))}
+    <>
+      <Card className="py-4 px-8 mt-4 mr-8 max-w-[640px]">
+        <div className="text-center">
+          <p className="text-xl font-bold">{index + 1}</p>
+          <h2 className="font-bold">{specification.label}</h2>
+          <p
+            className={clsx(
+              "mb-6",
+              validationResult.status === "INCOMPLETE"
+                ? "text-red-400"
+                : "text-green-200"
+            )}
+          >
+            {validationResult.status}
+          </p>
+        </div>
+        {validationResult.errors.map((error, index) => (
+          <p className="text-red-400 text-sm mb-1" key={error}>
+            *{error}
+          </p>
+        ))}
 
-      {React.createElement(componentMap[specification.step], {
-        property,
-        specification,
-        validationResult,
-      })}
-    </Card>
+        {React.createElement(componentMap[specification.step], {
+          property,
+          specification,
+          validationResult,
+        })}
+      </Card>
+    </>
   );
 };
 

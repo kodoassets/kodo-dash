@@ -12,6 +12,12 @@ export interface ConfigurationStepStatus {
   errors: string[];
 }
 
+export interface OfferingStatusDefinition {
+  status: OfferingStatus;
+  label: string;
+  color: string;
+}
+
 export interface ConfigurationSpecification {
   step: ConfigurationStep;
   label: string;
@@ -66,14 +72,17 @@ export const getProperties: () => Promise<Property[]> = async () => {
   return data.json();
 };
 
-export const getOfferingSpecification: () => Promise<
-  ConfigurationSpecification[]
-> = async () => {
+export const getOfferingSpecification: () => Promise<{
+  statuses: {
+    [key in OfferingStatus]: OfferingStatusDefinition;
+  };
+  steps: ConfigurationSpecification[];
+}> = async () => {
   const data = await fetch(apiUrl + "/backoffice/properties/specification");
   return data.json();
 };
 
-export const getPropertyById = async (id: string) => {
+export const getPropertyById = async (id: string): Promise<Property> => {
   const data = await fetch(apiUrl + `/backoffice/properties/${id}`);
   return data.json();
 };

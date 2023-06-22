@@ -6,7 +6,7 @@ interface PropertyListItemProps {
   property: Property;
 }
 
-const statusMap: {
+export const statusMap: {
   [key: string]: { label: string; color: string };
 } = {
   DRAFT: {
