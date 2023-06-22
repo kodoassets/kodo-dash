@@ -14,6 +14,8 @@ jobs:
     if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
     runs-on: ubuntu-latest
     name: Build and Deploy Job
+    env:
+      NEXT_PUBLIC_API_URL: https://gateway-dev.kodoassets.com
     steps:
       - uses: actions/checkout@v3
         with:
@@ -33,7 +35,7 @@ jobs:
           ###### End of Repository/Build Configurations ######
           app_build_command: "npm run build"
           api_build_command: "rm -rf ./node_modules/@next/swc-* && rm -rf ./.next/cache"
-          
+
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
     runs-on: ubuntu-latest
