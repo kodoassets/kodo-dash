@@ -24,7 +24,7 @@ const PrimaryButton = ({
     <button
       disabled
       type={submit ? "submit" : "button"}
-      className={`${className} bg-primaryBlue text-white font-light rounded-full hover:gradient text-xs px-6 py-2 `}
+      className={`bg-primaryBlue text-white font-light rounded-full hover:gradient text-xs px-6 py-2 ${className}`}
     >
       <svg
         role="status"
