@@ -52,6 +52,8 @@ const Permissions = () => {
                 name,
               });
               await refetch();
+              setName("");
+              setAddress("");
             } catch (e) {
               if ((e as AxiosError).response?.status === 409) {
                 toast.error("This wallet is already an admin");
