@@ -22,18 +22,16 @@ const SignMessage = () => {
     },
   });
 
-  const { setSignedMessage, setWalletAddress } = useAuthStore((state) => ({
-    setSignedMessage: state.setSignedMessage,
-    setWalletAddress: state.setWalletAddress,
-  }));
-
   useEffect(() => {
     if (signedMessage && address) {
-      setSignedMessage(signedMessage);
-      setWalletAddress(address);
-      Router.push("/dashboard");
+      localStorage.setItem("signedMessage", signedMessage);
+      localStorage.setItem("walletAddress", address);
+
+      // setSignedMessage(signedMessage);
+      // setWalletAddress(address);
+      // Router.push("/dashboard");
     }
-  }, [signedMessage, address, setSignedMessage, setWalletAddress]);
+  }, [signedMessage, address]);
 
   return (
     <>
