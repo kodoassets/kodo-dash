@@ -6,8 +6,10 @@ import CreateToken, {
 } from "@/components/offering/CreateOffer/CreateToken";
 import { createProperty } from "@/data/mutations/create-property";
 import Router from "next/router";
+import useAuth from "@/core/use-auth";
 
 const NewOfferingPage = () => {
+  useAuth(["createOffering"]);
   const [createPropertyLoading, setCreatePropertyLoading] = useState(false);
 
   const onSubmitToken = async ({

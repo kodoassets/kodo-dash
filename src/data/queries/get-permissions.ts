@@ -1,12 +1,15 @@
+import { Permission } from "@/core/use-auth";
 import { apiUrl } from "./config";
 
-type Permission = {
+export type PermissionDefinition = {
   id: string;
   name: string;
   description: string;
 };
 
-export const getPermissions: () => Promise<Permission[]> = async () => {
+export const getPermissions: () => Promise<
+  PermissionDefinition[]
+> = async () => {
   const data = await fetch(apiUrl + "/backoffice/permissions");
   return data.json();
 };

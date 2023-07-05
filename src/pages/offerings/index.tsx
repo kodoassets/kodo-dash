@@ -1,12 +1,13 @@
 import PrimaryButton from "@/components/Button/PrimaryButton";
-import PropertyListItem from "@/components/PropertyListItem";
 import DraftListItem from "@/components/PropertyListItem/DraftListItem";
 import Scaffold from "@/components/Scaffold";
+import useAuth from "@/core/use-auth";
 import { getProperties } from "@/data/queries/get-properties";
 import { useQuery } from "@tanstack/react-query";
 import Router from "next/router";
 
 const Offerings = () => {
+  useAuth(["viewOfferings"]);
   const { data } = useQuery(["properties"], () => getProperties());
   return (
     <Scaffold title="Dashboard">

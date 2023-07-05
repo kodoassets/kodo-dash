@@ -6,12 +6,16 @@ import { useEffect } from "react";
 import Router from "next/router";
 import useAuthStore from "@/core/auth-store";
 import { apiUrl } from "@/data/queries/config";
+import { SIGNED_MESSAGE_KEY } from "@/core/use-auth";
 
 const SignMessage = () => {
   const { address } = useAccount();
   const { disconnect } = useDisconnect();
 
   const { data: signedMessage, signMessage } = useSignMessage();
+
+  const { setSignedMessage } = useAuthStore((state) => state);
+
   const { mutateAsync: createNonce } = useMutation({
     mutationFn: () => {
       return axios.post(apiUrl + "/accounts/verifications", {
@@ -24,14 +28,10 @@ const SignMessage = () => {
 
   useEffect(() => {
     if (signedMessage && address) {
-      localStorage.setItem("signedMessage", signedMessage);
-      localStorage.setItem("walletAddress", address);
-
-      // setSignedMessage(signedMessage);
-      // setWalletAddress(address);
-      // Router.push("/dashboard");
+      setSignedMessage(signedMessage);
+      Router.push("/dashboard/63e81785d438180b942e5304"); // todo: check what permissions user has and route to a page that they have access to
     }
-  }, [signedMessage, address]);
+  }, [signedMessage, address, setSignedMessage]);
 
   return (
     <>
@@ -41,7 +41,6 @@ const SignMessage = () => {
         onClick={async () => {
           const data = await createNonce();
           if (!data?.data?.nonce) {
-            // handle error
             return;
           }
           signMessage({ message: data.data.nonce });

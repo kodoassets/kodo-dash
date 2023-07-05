@@ -17,10 +17,12 @@ import { useRouter } from "next/router";
 import PrimaryButton from "@/components/Button/PrimaryButton";
 import { putOfferingStatus } from "@/data/mutations/put-offering-status";
 import { toast } from "react-toastify";
+import useAuth from "@/core/use-auth";
 
 export const PropertyByIdQueryKey = "propertyById";
 
 const PropertyPage = () => {
+  useAuth(["editOfferingContent"]);
   const router = useRouter();
 
   const [changeStatusLoading, setChangeStatusLoading] = useState(false);

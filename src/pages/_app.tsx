@@ -12,6 +12,7 @@ import { configureChains, createClient, WagmiConfig } from "wagmi";
 import { arbitrum, mainnet, polygon } from "wagmi/chains";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ToastContainer } from "react-toastify";
+import useAuth from "@/core/use-auth";
 
 const chains = [mainnet, polygon];
 const projectId = "YOUR_PROJECT_ID";

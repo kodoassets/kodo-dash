@@ -2,6 +2,7 @@ import PrimaryButton from "@/components/Button/PrimaryButton";
 import Card from "@/components/Card";
 import Scaffold from "@/components/Scaffold";
 import TextInput from "@/components/TextInput";
+import useAuth from "@/core/use-auth";
 import { createAdmin } from "@/data/mutations/create-admin";
 import { getAdminWallets } from "@/data/queries/get-admin-wallets";
 import { useQuery } from "@tanstack/react-query";
@@ -11,6 +12,7 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 
 const Permissions = () => {
+  useAuth(["editPermissions"]);
   const [name, setName] = useState("");
   const [address, setAddress] = useState("");
   const [addLoading, setAddLoading] = useState(false);

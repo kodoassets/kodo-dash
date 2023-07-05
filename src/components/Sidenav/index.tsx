@@ -12,7 +12,7 @@ const Sidenav = () => {
         <Image src="/svgs/logo.svg" alt="logo" width={100} height={100} />
       </div>
       <NavLink
-        route={"/dashboard"}
+        route={"/dashboard/63e81785d438180b942e5304"}
         active={asPath === "/dashboard"}
         text="Dashboard"
         icon={<FaBuilding className="inline" />}
