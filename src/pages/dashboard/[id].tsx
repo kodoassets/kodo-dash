@@ -6,21 +6,26 @@ import axios from "axios";
 import ProgressBar from "@/components/ProgressBar";
 import PieChartData from "@/components/DataView/PieChartData";
 import useAuth from "@/core/use-auth";
+import { useRouter } from "next/router";
 
 export default function Home() {
-  useAuth(["viewDashboard"]);
-  const { address } = useAccount();
+  // useAuth(["viewDashboard"]);
+  // const res = useAccount();
+
+  const router = useRouter();
+  console.log(router?.query?.id);
 
   const { data } = useQuery(["stats"], {
     queryFn: () =>
-      axios
-        .get(`${process.env.NEXT_PUBLIC_API_URL}/backoffice/stats`, {
+      axios.get(
+        `${process.env.NEXT_PUBLIC_API_URL}/backoffice/stats/${router.query.id}`,
+        {
           headers: {
             // "X-signed-message": signedMessage,
-            "X-wallet-address": address,
+            // "X-wallet-address": address,
           },
-        })
-        .then((res) => res.data),
+        }
+      ),
   });
 
   const mockDataset = {
@@ -46,42 +51,59 @@ export default function Home() {
     datasets: [mockDataset],
   };
 
+  if (!data?.data) return null;
+
+  const {
+    data: {
+      tokensSold,
+      totalSold,
+      averageTicketPrice,
+      totalOrders,
+      totalActiveUsers,
+      totalSupply,
+      tokenPriceInUsd,
+    },
+  } = data;
+
   return (
     <Scaffold title="Dashboard" className="truncate">
       <div className="flex flex-row flex-wrap gap-8 justify-between">
         <DataWithIcon
           label="Tokens sold"
-          value={data?.tokensSold || "-"}
-          subtitle={`of ${data?.totalSupply}`}
+          value={tokensSold?.toLocaleString() || "-"}
+          subtitle={`of ${totalSupply?.toLocaleString()}`}
           src="/imgs/tokens_sold.png"
         />
         <DataWithIcon
           label="Total Revenue"
-          value={data?.totalRevenue || "-"}
-          subtitle={`of ${data?.totalSupply * data?.tokenPriceInUsd}`}
+          value={`$${totalSold ? totalSold.toLocaleString() : "-"}`}
+          subtitle={`of $${(totalSupply * tokenPriceInUsd).toLocaleString()}`}
           src="/imgs/total_revenue.png"
         />
         <DataWithIcon
           label="Token Price"
-          value={data?.tokenPriceInUsd || "-"}
+          value={tokenPriceInUsd?.toLocaleString() || "-"}
           subtitle={`USD`}
           src="/imgs/token_price.png"
         />
         <DataWithIcon
           label="Dividends Paid"
-          value={data?.dividendsPaid || "-"}
+          value={"-"}
           subtitle="USD"
           src="/imgs/dividends_paid.png"
         />
         <DataWithIcon
           label="Cashback Paid"
-          value={data?.cashbackPaid || "-"}
-          subtitle={`of ${data?.cashbackPaid}`}
+          value={"-"}
+          subtitle={`of ${"N/A"}`}
           src="/imgs/cashback_paid.png"
         />
       </div>
 
-      <ProgressBar className="w-full my-16" progress={75} />
+      <ProgressBar
+        className="w-full my-16"
+        progress={Number(((tokensSold / totalSupply) * 100).toFixed(2))}
+      />
 
       <div className="flex flex-row gap-8 flex-wrap justify-between">
         <PieChartData title="Payment Method" {...doubleMockChartProps} />
@@ -90,9 +112,9 @@ export default function Home() {
         <div className="flex flex-col py-8 justify-between">
           <div className="flex flex-row">
             <DataWithIcon
-              label="Tokens sold"
-              value={data?.tokensSold || "-"}
-              subtitle={`of ${data?.totalSupply}`}
+              label="New Users"
+              value={"-"}
+              subtitle={`of ${totalActiveUsers}`}
               src="/imgs/tokens_sold.png"
             />
             <div className="flex flex-col ml-2">
@@ -106,11 +128,11 @@ export default function Home() {
               </div>
             </div>
           </div>
-          <div>
+          <div className="mt-8">
             <DataWithIcon
-              label="Tokens sold"
-              value={data?.tokensSold || "-"}
-              subtitle={`of ${data?.totalSupply}`}
+              label="Recurrent Users"
+              value={totalActiveUsers || "-"}
+              subtitle={`of ${totalActiveUsers}`}
               src="/imgs/tokens_sold.png"
             />
           </div>

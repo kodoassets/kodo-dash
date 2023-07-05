@@ -13,7 +13,7 @@ export default function Home() {
   const { data } = useQuery(["stats"], {
     queryFn: () =>
       axios
-        .get(`${process.env.NEXT_PUBLIC_API_URL}/backoffice/stats`, {
+        .get(`${process.env.NEXT_PUBLIC_API_URL}/backoffice/users`, {
           headers: {
             // "X-signed-message": signedMessage,
             "X-wallet-address": address,
@@ -50,26 +50,26 @@ export default function Home() {
       <div className="flex flex-row flex-basis-[420px] gap-8">
         <DataWithIcon
           label="Total Users"
-          value={data?.users?.allTime || "-"}
+          value={data?.activeUsers || "-"}
           subtitle={`all time`}
           src="/imgs/tokens_sold.png"
         />
         <DataWithIcon
           label="Active Users"
-          value={data?.totalRevenue || "-"}
-          subtitle={`of ${data?.users?.allTime}`}
+          value={data?.activeUsers || "-"}
+          subtitle={`of ${data?.activeUsers}`}
           src="/imgs/total_revenue.png"
         />
         <DataWithIcon
           label="Average Tokens"
-          value={data?.tokenPriceInUsd || "-"}
+          value={data?.avgTokensPerUser?.toFixed(2) || "-"}
           subtitle={"per user"}
           src="/imgs/token_price.png"
         />
         <DataWithIcon
           label="Multiple Token Holders"
-          value={data?.dividendsPaid || "-"}
-          subtitle={`of ${data?.users?.activeUsers}`}
+          value={data?.multipleTokenHolders || "-"}
+          subtitle={`of ${data?.ctiveUsers}`}
           src="/imgs/dividends_paid.png"
         />
       </div>
