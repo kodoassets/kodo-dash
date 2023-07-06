@@ -47,6 +47,7 @@ export interface Property {
   };
   cover: string;
   description: string;
+  reports: string[];
   details: {
     icon: string;
     referenceText: string;

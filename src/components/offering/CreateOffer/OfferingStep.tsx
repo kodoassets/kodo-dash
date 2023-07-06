@@ -10,6 +10,7 @@ import TokenStep from "../steps/TokenStep";
 import DocumentsStep from "../steps/DocumentsStep";
 import ImagesStep from "../steps/ImagesStep";
 import TextContentStep from "../steps/TextContentStep";
+import ReportsStep from "../steps/ReportsStep";
 
 interface Props {
   index: number;
@@ -23,6 +24,7 @@ const componentMap = {
   TOKEN: TokenStep,
   IMAGES: ImagesStep,
   TEXT_CONTENT: TextContentStep,
+  REPORTS: ReportsStep,
 };
 
 const OfferingStep = ({
