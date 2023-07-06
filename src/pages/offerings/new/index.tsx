@@ -9,7 +9,7 @@ import Router from "next/router";
 import useAuth from "@/core/use-auth";
 
 const NewOfferingPage = () => {
-  useAuth(["createOffering"]);
+  // useAuth(["createOffering"]);
   const [createPropertyLoading, setCreatePropertyLoading] = useState(false);
 
   const onSubmitToken = async ({

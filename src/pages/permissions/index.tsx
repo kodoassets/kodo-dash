@@ -12,7 +12,7 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 
 const Permissions = () => {
-  useAuth(["editPermissions"]);
+  // useAuth(["editPermissions"]);
   const [name, setName] = useState("");
   const [address, setAddress] = useState("");
   const [addLoading, setAddLoading] = useState(false);
@@ -37,7 +37,7 @@ const Permissions = () => {
         />
         <TextInput
           className="mt-2"
-          label="Name (optional)"
+          label="Name (required)"
           value={name}
           onChange={setName}
         />
@@ -45,7 +45,7 @@ const Permissions = () => {
           text="Add"
           className="mt-3"
           isLoading={addLoading}
-          disabled={!address || !address.startsWith("0x")}
+          disabled={!address || !address.startsWith("0x") || !name}
           onClick={async () => {
             setAddLoading(true);
             try {

@@ -7,7 +7,7 @@ import { useQuery } from "@tanstack/react-query";
 import Router from "next/router";
 
 const Offerings = () => {
-  useAuth(["viewOfferings"]);
+  // useAuth(["viewOfferings"]);
   const { data } = useQuery(["properties"], () => getProperties());
   return (
     <Scaffold title="Dashboard">

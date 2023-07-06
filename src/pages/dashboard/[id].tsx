@@ -1,6 +1,5 @@
 import Scaffold from "@/components/Scaffold";
 import DataWithIcon from "@/components/DataView/DataWithIcon";
-import { useAccount } from "wagmi";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import ProgressBar from "@/components/ProgressBar";
@@ -10,10 +9,8 @@ import { useRouter } from "next/router";
 
 export default function Home() {
   // useAuth(["viewDashboard"]);
-  // const res = useAccount();
 
   const router = useRouter();
-  console.log(router?.query?.id);
 
   const { data } = useQuery(["stats"], {
     queryFn: () =>

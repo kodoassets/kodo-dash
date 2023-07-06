@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import Router from "next/router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useAccount } from "wagmi";
 import useAuthStore from "./auth-store";
 import { getAdminWallet } from "@/data/queries/get-permissions";
@@ -22,64 +22,56 @@ export type Permission =
 
 const useAuth = (requiredPermissions?: Permission[]) => {
   const { address } = useAccount();
-  const { signedMessage } = useAuthStore((state) => state);
-
-  console.log(address);
-  console.log(signedMessage);
-
-  const { data } = useQuery(["get-admin"], {
-    queryFn: async () => await getAdminWallet(address || ""),
-    enabled: !!address && !!signedMessage,
-    cacheTime: 0,
-    onSettled(data, error) {
-      // @ts-ignore
-      if (error || data?.message === "Wallet not found") {
-        toast.error("Wallet not found");
-        Router.replace("/");
-      }
-
-      // @ts-ignore
-      if (data?.permissions?.length === 0) {
-        toast.error("You don't have permissions set up for this wallet");
-        Router.replace("/");
-      }
-    },
+  const { signedMessage, permissions, setPermissions } = useAuthStore(
+    (state) => state
+  );
+  console.log({
+    address,
+    signedMessage,
+    permissions,
   });
 
-  console.log(data);
+  useEffect(() => {
+    if (address && signedMessage) {
+      getAdminWallet(address || "")
+        .then((data) => {
+          // @ts-ignore
+          if (data?.message === "Wallet not found") {
+            toast.error("Wallet not found");
+            Router.replace("/");
+          }
+          if (data?.permissions) {
+            setPermissions(data?.permissions);
+          }
+        })
+        .catch((e) => {
+          console.log("caught error");
+          Router.replace("/");
+        });
+    }
 
-  // useEffect(() => {
-  //   if ((!address || !signedMessage) && window.location.pathname !== "/") {
-  //     Router.replace("/");
-  //   }
-  // }, [address, signedMessage]);
+    if ((!address || !signedMessage) && window.location.pathname !== "/") {
+      console.log("No adddress or signed message");
+      Router.replace("/");
+    }
+  }, [address, signedMessage, setPermissions]);
 
-  console.log(data);
   // useEffect(() => {
   //   if (
-  //     data?.permissions?.find((p) => p.id === "all") ||
+  //     permissions?.find((p) => p === "all") ||
   //     window.location.pathname === "/"
   //   ) {
   //     return;
   //   }
   //   if (
   //     requiredPermissions?.length &&
-  //     !data?.permissions.every((p) =>
-  //       requiredPermissions?.includes(p.id as Permission)
-  //     )
+  //     !permissions.every((p) => requiredPermissions?.includes(p as Permission))
   //   ) {
   //     toast.error("You don't have permissions to access this page");
   //     Router.replace("/");
   //   }
   //   return;
-  //   // @ts-ignore
-  // }, [requiredPermissions, data?.permissions, data?.permissions?.length]);
-
-  if (!address || !signedMessage) {
-    return null;
-  }
-
-  return data;
+  // }, [requiredPermissions, permissions]);
 };
 
 export default useAuth;

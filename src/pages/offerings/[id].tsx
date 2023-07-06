@@ -22,7 +22,7 @@ import useAuth from "@/core/use-auth";
 export const PropertyByIdQueryKey = "propertyById";
 
 const PropertyPage = () => {
-  useAuth(["editOfferingContent"]);
+  // useAuth(["editOfferingContent"]);
   const router = useRouter();
 
   const [changeStatusLoading, setChangeStatusLoading] = useState(false);

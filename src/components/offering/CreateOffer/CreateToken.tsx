@@ -83,6 +83,7 @@ const CreateToken = ({ onSubmit, loading = false }: Props) => {
           isLoading={loading || isDeploying}
           text="Create token"
           onClick={async () => {
+            // @ts-ignore
             if (window.ethereum) {
               setIsDeploying(true);
               try {

@@ -8,7 +8,7 @@ import useAuth from "@/core/use-auth";
 import PieChartData from "@/components/DataView/PieChartData";
 
 export default function Home() {
-  useAuth(["viewUsers"]);
+  // useAuth(["viewUsers"]);
   const { address } = useAccount();
 
   // const mockDataset = {
@@ -40,7 +40,6 @@ export default function Home() {
         .then((res) => res.data),
   });
 
-  console.log(data);
   if (!data) return null;
 
   const perCoin = {

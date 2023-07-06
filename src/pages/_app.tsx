@@ -2,34 +2,40 @@ import "@/styles/globals.css";
 import type { AppProps } from "next/app";
 import "react-toastify/dist/ReactToastify.css";
 
-import {
-  EthereumClient,
-  w3mConnectors,
-  w3mProvider,
-} from "@web3modal/ethereum";
 import { Web3Modal } from "@web3modal/react";
-import { configureChains, createClient, WagmiConfig } from "wagmi";
-import { arbitrum, mainnet, polygon } from "wagmi/chains";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ToastContainer } from "react-toastify";
 import useAuth from "@/core/use-auth";
+import { providers } from "ethers";
+import { mainnet, polygon } from "wagmi/chains";
+// @ts-ignore
+import { configureChains, createConfig, WagmiConfig } from "wagmi";
+import { alchemyProvider } from "wagmi/providers/alchemy";
+import { EthereumClient, w3mConnectors } from "@web3modal/ethereum";
+import { MetaMaskConnector } from "wagmi/connectors/metaMask";
+import { WalletConnectConnector } from "wagmi/connectors/walletConnect";
 
-const chains = [mainnet, polygon];
-const projectId = "YOUR_PROJECT_ID";
+const projectId = "284bbd5e31e1667d697f3ca612c9bdd7";
 
-const { provider } = configureChains(chains, [w3mProvider({ projectId })]);
-const wagmiClient = createClient({
+const { chains, publicClient, webSocketPublicClient } = configureChains(
+  [mainnet, polygon],
+  [alchemyProvider({ apiKey: "LFUvQaD3PRH9b7lSALfbDDA61-tg_zfX" })]
+);
+
+const config = createConfig({
   autoConnect: true,
-  connectors: w3mConnectors({ projectId, version: 1, chains }),
-  provider,
+  publicClient,
+  connectors: w3mConnectors({ projectId, chains, version: 2 }),
+  webSocketPublicClient,
 });
-const ethereumClient = new EthereumClient(wagmiClient, chains);
+
 const queryClient = new QueryClient();
+const ethereumClient = new EthereumClient(config, chains);
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <>
-      <WagmiConfig client={wagmiClient}>
+      <WagmiConfig config={config}>
         <QueryClientProvider client={queryClient}>
           <Component {...pageProps} />
           <ToastContainer />

@@ -7,7 +7,7 @@ import ProgressBar from "@/components/ProgressBar";
 import useAuth from "@/core/use-auth";
 
 export default function Home() {
-  useAuth(["viewUsers"]);
+  // useAuth(["viewUsers"]);
   const { address } = useAccount();
 
   const { data } = useQuery(["stats"], {
