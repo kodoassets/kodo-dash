@@ -22,7 +22,11 @@ Chart.register(
 );
 import { Line } from "react-chartjs-2";
 
-const LineChart = ({ data }) => {
+const LineChart = (data: {
+  labels: string[];
+  dataset1: number[];
+  dataset2: number[];
+}) => {
   const chartData = {
     labels: data.labels,
     datasets: [

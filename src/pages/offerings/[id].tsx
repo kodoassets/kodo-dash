@@ -101,13 +101,13 @@ export default function Home() {
         <PieChartData
           title="Payments per Country"
           labels={propertyData.data.paymentsPerCountry.map(
-            (country) => country.country
+            (country: any) => country.country
           )}
           datasets={[
             {
               label: "Payments per Country",
               data: propertyData.data.paymentsPerCountry.map(
-                (country) => country.count
+                (country: any) => country.count
               ),
               backgroundColor: ["#000F14", "#00AEEF", "#4C2D9A"],
             },
@@ -116,13 +116,13 @@ export default function Home() {
         <PieChartData
           title="Users per Country"
           labels={propertyData.data.usersPerCountry.map(
-            (country) => country._id
+            (country: any) => country._id
           )}
           datasets={[
             {
               label: "Users per Country",
               data: propertyData.data.usersPerCountry.map(
-                (country) => country.count
+                (country: any) => country.count
               ),
               backgroundColor: ["#000F14", "#00AEEF", "#4C2D9A"],
             },

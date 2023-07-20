@@ -46,9 +46,9 @@ export default function Home() {
   return (
     <Scaffold title="Payments" className="truncate">
       <div className="grid gap-8">
-        <div className="bg-gradient-2 py-6 px-8 text-white text-start rounded-2xl h-[600px]">
+        {/* <div className="bg-gradient-2 py-6 px-8 text-white text-start rounded-2xl h-[600px]">
           graph here
-        </div>
+        </div> */}
         <div className="grid grid-cols-4 gap-6">
           <div className="col-span-2 grid grid-cols-2 gap-6">
             <PieChartData
@@ -88,10 +88,12 @@ export default function Home() {
             <div className="grid grid-cols-2 mt-4">
               <div className="h-[264px]">
                 <PieChart
-                  labels={data?.totalPerCountry?.map((row) => row.Country)}
+                  labels={data?.totalPerCountry?.map((row: any) => row.Country)}
                   datasets={[
                     {
-                      data: data?.totalPerCountry?.map((row) => row.TotalSold),
+                      data: data?.totalPerCountry?.map(
+                        (row: any) => row.TotalSold
+                      ),
                       backgroundColor: ["#000F14", "#00AEEF", "#4C2D9A"],
                     },
                   ]}
@@ -114,8 +116,11 @@ export default function Home() {
                   </thead>
                   <tbody>
                     {data?.totalPerCountry
-                      ?.sort((a, b) => b.TotalSold - a.TotalSold)
-                      .map((row, index: number) => (
+                      ?.sort(
+                        (a: { TotalSold: number }, b: { TotalSold: number }) =>
+                          b.TotalSold - a.TotalSold
+                      )
+                      .map((row: any, index: number) => (
                         <tr
                           key={row.country}
                           className="bg-[#000F14] h-7 text-sm"
