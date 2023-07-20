@@ -66,6 +66,7 @@ export interface Property {
     environment: string;
   };
   whitepaperUrl?: string;
+  totalTokensSold?: number;
 }
 
 export const getProperties: () => Promise<Property[]> = async () => {

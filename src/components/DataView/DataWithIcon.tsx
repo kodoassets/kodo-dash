@@ -11,11 +11,11 @@ interface Props {
 const LabeledValue = ({ label, value, subtitle, src, className }: Props) => {
   return (
     <div
-      className={`border border-[#C6FFE0] flex flex-row bg-gradient-2 rounded-md pl-6 py-4 min-w-[290px] max-w-[290px] ${
+      className={`border border-[#C6FFE0] flex flex-row items-center bg-gradient-2 rounded-xl px-4 py-3 min-w-[240px] ${
         className || ""
       }`}
     >
-      <Image width={74} height={74} src={src} alt="" className="mr-4" />
+      <Image width={72} height={72} src={src} alt="" className="mr-4" />
       <div className="flex flex-col">
         <span className="text-white text-sm font-light">{label}</span>
         <span className="text-lg text-gradient">{value}</span>

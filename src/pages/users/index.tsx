@@ -46,7 +46,7 @@ export default function Home() {
   ];
 
   return (
-    <Scaffold title="Dashboard" className="truncate">
+    <Scaffold title="Users" className="truncate">
       <div className="flex flex-row flex-basis-[420px] gap-8">
         <DataWithIcon
           label="Total Users"
@@ -69,7 +69,7 @@ export default function Home() {
         <DataWithIcon
           label="Multiple Token Holders"
           value={data?.multipleTokenHolders || "-"}
-          subtitle={`of ${data?.ctiveUsers}`}
+          subtitle={`of ${data?.activeUsers}`}
           src="/imgs/dividends_paid.png"
         />
       </div>

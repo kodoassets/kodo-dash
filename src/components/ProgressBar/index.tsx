@@ -11,7 +11,7 @@ const ProgressBar = ({ progress, innerLabel, className }: Props) => {
   return (
     <div
       className={clsx(
-        `w-full h-[22px] rounded-[71px] relative bg-[#7896A1]`,
+        `w-full h-[22px] rounded-[71px] relative bg-[#7896A1] text-black`,
         className
       )}
     >

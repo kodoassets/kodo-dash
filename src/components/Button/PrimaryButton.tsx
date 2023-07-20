@@ -49,7 +49,7 @@ const PrimaryButton = ({
       whileHover={{ scale: disabled ? 1 : 1.02 }}
       whileTap={{ scale: 0.9 }}
       className={clsx(
-        "text-xs px-6 py-2 ",
+        "text-md px-6 py-2 ",
         disabled
           ? "bg-[rgba(0,0,0,0.1)] text-[rgba(255,255,255,0.2)] rounded-full align-center"
           : "bg-primaryBlue text-white font-light rounded-full align-center hover:gradient",

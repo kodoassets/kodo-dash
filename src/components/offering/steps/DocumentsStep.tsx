@@ -7,7 +7,7 @@ import {
   ConfigurationStepStatus,
   Property,
 } from "@/data/queries/get-properties";
-import { PropertyByIdQueryKey } from "@/pages/offerings/[id]";
+import { PropertyByIdQueryKey } from "@/pages/offerings/[slug]";
 import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 import { useState } from "react";

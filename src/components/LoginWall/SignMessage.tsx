@@ -29,7 +29,7 @@ const SignMessage = () => {
   useEffect(() => {
     if (signedMessage && address) {
       setSignedMessage(signedMessage);
-      Router.push("/dashboard/63e81785d438180b942e5304"); // todo: check what permissions user has and route to a page that they have access to
+      Router.push("/offerings/"); // todo: check what permissions user has and route to a page that they have access to
     }
   }, [signedMessage, address, setSignedMessage]);
 

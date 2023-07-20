@@ -37,7 +37,7 @@ const NewOfferingPage = () => {
 
   return (
     <Scaffold title="Offerings">
-      <h1 className="text-xl text-white">Token Setup</h1>
+      <h1 className="text-2xl text-white">Token Setup</h1>
       <div className="flex flex-row">
         <CreateToken onSubmit={onSubmitToken} loading={createPropertyLoading} />
       </div>

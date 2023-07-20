@@ -27,6 +27,7 @@ export const options = {
     },
   },
   // responsive: true,
+
   scales: {
     x: {
       stacked: true,

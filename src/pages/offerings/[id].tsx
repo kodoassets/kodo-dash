@@ -1,116 +1,172 @@
-import { useState } from "react";
-import Card from "@/components/Card";
-import { statusMap } from "@/components/PropertyListItem/DraftListItem";
 import Scaffold from "@/components/Scaffold";
-import OfferingStep from "@/components/offering/CreateOffer/OfferingStep";
-import Step from "@/components/offering/CreateOffer/Step";
-import {
-  ConfigurationSpecification,
-  ConfigurationStepStatus,
-  OfferingStatus,
-  OfferingStatusDefinition,
-  getOfferingSpecification,
-  getPropertyById,
-} from "@/data/queries/get-properties";
+import DataWithIcon from "@/components/DataView/DataWithIcon";
 import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
+import ProgressBar from "@/components/ProgressBar";
+import PieChartData from "@/components/DataView/PieChartData";
+
 import { useRouter } from "next/router";
-import PrimaryButton from "@/components/Button/PrimaryButton";
-import { putOfferingStatus } from "@/data/mutations/put-offering-status";
-import { toast } from "react-toastify";
-import useAuth from "@/core/use-auth";
 
-export const PropertyByIdQueryKey = "propertyById";
+export default function Home() {
+  // useAuth(["viewDashboard"]);
 
-const PropertyPage = () => {
-  // useAuth(["editOfferingContent"]);
   const router = useRouter();
 
-  const [changeStatusLoading, setChangeStatusLoading] = useState(false);
-  const [selectedStatus, setSelectedStatus] = useState<"" | OfferingStatus>("");
+  const { data: propertyData } = useQuery(["properties"], {
+    queryFn: () =>
+      axios.get(
+        `${process.env.NEXT_PUBLIC_API_URL}/backoffice/properties/${router.query.id}`,
+        {
+          headers: {
+            // "X-signed-message": signedMessage,
+            // "X-wallet-address": address,
+          },
+        }
+      ),
+  });
 
-  const { data } = useQuery(["specification"], () =>
-    getOfferingSpecification()
-  );
+  if (!propertyData?.data) return null;
 
-  const { data: property } = useQuery(
-    [PropertyByIdQueryKey, router.query.id],
-    () => getPropertyById(router.query.id as string),
-    { enabled: !!router.query.id, refetchInterval: 1000 }
-  );
-
-  if (!data?.steps || !data?.statuses || !property) return null;
-
-  const { steps, statuses } = data;
-  const allStepsFinished = property.configurationSteps.every(
-    (step: ConfigurationStepStatus) => step.status === "COMPLETE"
-  );
-
-  if (!property.configurationSteps) return null;
+  const {
+    data: {
+      newUsers: { userCount, averageTicket },
+      recurrentUsers: {
+        userCount: recurrentUserCount,
+        averageTicket: recurrentAverageTicket,
+      },
+      paymentMethod: { totalSold, perBlockchain, perCoin },
+      totalTokensSold,
+      tokenPriceInUsd,
+      contract: { totalSupply },
+    },
+  } = propertyData;
 
   return (
-    <Scaffold title="Edit offering">
-      {/* {property.status !== "DRAFT" || allStepsFinished ? ( */}
-      <Card className="py-4 px-8 mt-4 mr-8 max-w-[640px]">
-        <p className="text-xl font-bold">
-          Status:{" "}
-          <span className={statusMap[property.status].color}>
-            {statusMap[property.status].label}
-          </span>
-        </p>
-        {property.status === "DRAFT" && !allStepsFinished ? (
-          <p className="text-sm text-gray-400">
-            Complete all steps to enable publishing this offering.
-          </p>
-        ) : (
-          <>
-            <p className="mt-2">Change status:</p>
-            <div className="flex flex-row justify-between">
-              <select
-                className="mt-1 border px-2 py-1 rounded-lg text-white bg-[#000F14]"
-                value={selectedStatus}
-                onChange={(e) => {
-                  setSelectedStatus(e.target.value as OfferingStatus);
-                }}
-              >
-                <option value="">Select a status...</option>
-                {Object.entries(statuses).map(([key, step]) => (
-                  <option key={key} value={key}>
-                    {step.label}
-                  </option>
-                ))}
-              </select>
-              <PrimaryButton
-                text="SAVE"
-                isLoading={changeStatusLoading}
-                disabled={!selectedStatus || selectedStatus === property.status}
-                onClick={async () => {
-                  if (!selectedStatus) return;
-                  setChangeStatusLoading(true);
-                  try {
-                    await putOfferingStatus(property._id, selectedStatus);
-                    toast.success("Status updated successfully");
-                  } finally {
-                    setChangeStatusLoading(false);
-                  }
-                }}
-              />
-            </div>
-          </>
-        )}
-      </Card>
-      {steps.map((step, index) => (
-        <OfferingStep
-          key={step.label}
-          specification={step}
-          property={property}
-          index={index}
-          validationResult={property.configurationSteps.find(
-            (s: ConfigurationStepStatus) => s.step === step.step
-          )}
+    <Scaffold title={"Property"} className="truncate" hasPropertySelector>
+      <div className="grid grid-cols-5 flex-wrap gap-8 justify-between">
+        <DataWithIcon
+          label="Tokens sold"
+          value={totalTokensSold?.toLocaleString() || "-"}
+          subtitle={`of ${totalSupply?.toLocaleString()}`}
+          src="/imgs/tokens_sold.png"
         />
-      ))}
+        <DataWithIcon
+          label="Total Revenue"
+          value={`$${totalSold ? totalSold.toLocaleString() : "-"}`}
+          subtitle={`of $${(totalSupply * tokenPriceInUsd).toLocaleString()}`}
+          src="/imgs/total_revenue.png"
+        />
+        <DataWithIcon
+          label="Token Price"
+          value={tokenPriceInUsd?.toLocaleString() || "-"}
+          subtitle={`USD`}
+          src="/imgs/token_price.png"
+        />
+        <DataWithIcon
+          label="Dividends Paid"
+          value={"-"}
+          subtitle="USD"
+          src="/imgs/dividends_paid.png"
+        />
+        <DataWithIcon
+          label="Cashback Paid"
+          value={"-"}
+          subtitle={`USD`}
+          src="/imgs/cashback_paid.png"
+        />
+      </div>
+
+      <ProgressBar
+        className="w-full my-16"
+        progress={Number(((totalTokensSold / totalSupply) * 100).toFixed(2))}
+      />
+
+      <div className="grid grid-cols-4">
+        <PieChartData
+          title="Payment Method"
+          labels={["USDC", "ETHEREUM", "USDT", "POLYGON"]}
+          datasets={[
+            {
+              label: "Per Blockchain",
+              data: [perBlockchain?.ETHEREUM, perBlockchain?.POLYGON],
+              backgroundColor: ["#065F70", "#A314AB", "#1255F1"],
+            },
+            {
+              label: "Per Coin",
+              data: [perCoin?.USDC, perCoin?.USDT],
+              backgroundColor: ["#065F70", "#A314AB", "#1255F1"],
+            },
+          ]}
+        />
+        <PieChartData
+          title="Payments per Country"
+          labels={propertyData.data.paymentsPerCountry.map(
+            (country) => country.country
+          )}
+          datasets={[
+            {
+              label: "Payments per Country",
+              data: propertyData.data.paymentsPerCountry.map(
+                (country) => country.count
+              ),
+              backgroundColor: ["#065F70", "#A314AB", "#1255F1"],
+            },
+          ]}
+        />
+        <PieChartData
+          title="Users per Country"
+          labels={propertyData.data.usersPerCountry.map(
+            (country) => country._id
+          )}
+          datasets={[
+            {
+              label: "Users per Country",
+              data: propertyData.data.usersPerCountry.map(
+                (country) => country.count
+              ),
+              backgroundColor: ["#065F70", "#A314AB", "#1255F1"],
+            },
+          ]}
+        />
+        <div className="flex flex-col py-8 justify-between">
+          <div className="flex flex-row">
+            <DataWithIcon
+              label="New Users"
+              value={userCount || "-"}
+              subtitle={"users"}
+              src="/imgs/tokens_sold.png"
+            />
+            <div className="flex flex-col ml-4">
+              <p className="text-center text-white justify-self-end text-sm">
+                Avg
+                <br />
+                Ticket
+              </p>
+              <div className="bg-[#005E81] border border-gradient rounded-lg text-[#F8F8F8] px-2 py-1 mt-1">
+                {averageTicket?.toLocaleString() || "-"}
+              </div>
+            </div>
+          </div>
+          <div className="flex flex-row">
+            <DataWithIcon
+              label="Recurrent Users"
+              value={recurrentUserCount || "-"}
+              subtitle={"users"}
+              src="/imgs/tokens_sold.png"
+            />
+            <div className="flex flex-col ml-4">
+              <p className="text-center text-white justify-self-end text-sm">
+                Avg
+                <br />
+                Ticket
+              </p>
+              <div className="bg-[#005E81] border border-gradient rounded-lg text-[#F8F8F8] px-2 py-1 mt-1">
+                {recurrentAverageTicket?.toLocaleString() || "-"}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </Scaffold>
   );
-};
-
-export default PropertyPage;
+}
