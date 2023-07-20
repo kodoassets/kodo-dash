@@ -7,41 +7,41 @@ interface PropertyListItemProps {
   property: Property;
 }
 
+export const statusMap: {
+  [key: string]: { label: string; className: string; color: string };
+} = {
+  DRAFT: {
+    label: "DRAFT",
+    className: "bg-yellow-400/10 border-yellow-400 text-yellow-400",
+    color: "bg-yellow-400",
+  },
+  COMING_SOON: {
+    label: "SOON",
+    className: "bg-blue-600/10 border-blue-600 text-blue-600",
+    color: "bg-blue-600",
+  },
+  ANNOUNCED: {
+    label: "ANNOUNCED",
+    className: "bg-blue-500/10 border-blue-500 text-blue-500",
+    color: "bg-blue-500",
+  },
+  SALE: {
+    label: "SALE",
+    className: "bg-green-400/10 border-green-400 text-green-400",
+    color: "bg-green-400",
+  },
+  CLOSED: {
+    label: "CLOSED",
+    className: "bg-gray-400/10 border-gray-400 text-gray-400",
+    color: "bg-gray-400",
+  },
+};
+
 const PropertyList = ({ property }: PropertyListItemProps) => {
   const { status } = property;
   const completedConfigSteps = property.configurationSteps.filter(
     (step) => step.status === "COMPLETE"
   );
-
-  const statusMap: {
-    [key: string]: { label: string; className: string; color: string };
-  } = {
-    DRAFT: {
-      label: "DRAFT",
-      className: "bg-yellow-400/10 border-yellow-400 text-yellow-400",
-      color: "bg-yellow-400",
-    },
-    COMING_SOON: {
-      label: "SOON",
-      className: "bg-blue-600/10 border-blue-600 text-blue-600",
-      color: "bg-blue-600",
-    },
-    ANNOUNCED: {
-      label: "ANNOUNCED",
-      className: "bg-blue-500/10 border-blue-500 text-blue-500",
-      color: "bg-blue-500",
-    },
-    SALE: {
-      label: "SALE",
-      className: "bg-green-400/10 border-green-400 text-green-400",
-      color: "bg-green-400",
-    },
-    CLOSED: {
-      label: "CLOSED",
-      className: "bg-gray-400/10 border-gray-400 text-gray-400",
-      color: "bg-gray-400",
-    },
-  };
 
   const propertyStatus = statusMap[status];
 
@@ -49,7 +49,12 @@ const PropertyList = ({ property }: PropertyListItemProps) => {
     <tr
       className="bg-gradient hover:cursor-pointer border border-white/10 rounded-xl "
       onClick={() =>
-        Router.push("/offerings/[id]", `/offerings/${property._id}`)
+        property.status === "DRAFT"
+          ? Router.push(
+              "/offerings/edit/[id]",
+              `/offerings/edit/${property._id}`
+            )
+          : Router.push("/offerings/[id]", `/offerings/${property._id}`)
       }
     >
       <td className="flex flex-row items-center px-10 py-6">

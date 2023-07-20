@@ -8,7 +8,7 @@ import {
   ConfigurationStepStatus,
   Property,
 } from "@/data/queries/get-properties";
-import { PropertyByIdQueryKey } from "@/pages/offerings/[slug]";
+import { PropertyByIdQueryKey } from "@/pages/offerings/edit/[id]";
 import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { toast } from "react-toastify";
