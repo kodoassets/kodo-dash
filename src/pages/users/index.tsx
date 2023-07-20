@@ -84,7 +84,7 @@ export default function Home() {
               Users per Token
             </p>
             <div className="bg-gradient-2 rounded-lg p-4 ">
-              {data.usersPerToken.map((Data) => (
+              {data?.usersPerToken?.map((Data) => (
                 <div key={Data.propertyId} className="flex flex-row mt-2">
                   <span className="text-white bg-[#00AEEF] rounded-lg p-1 mr-2 text-xs min-w-[80px]">
                     {Data.tokenSymbol}
@@ -113,7 +113,7 @@ export default function Home() {
               Users per Country
             </p>
             <div className="bg-gradient-2 rounded-lg p-4 ">
-              {data.usersPerCountry.map((Data) => (
+              {data?.usersPerCountry?.map((Data) => (
                 <div key={Data._id} className="flex flex-row mt-2">
                   <span className="text-white bg-[#00AEEF] rounded-lg p-1 mr-2 text-xs min-w-[80px]">
                     {Data._id}
