@@ -58,7 +58,7 @@ const PropertyList = ({ property }: PropertyListItemProps) => {
       }
     >
       <td className="flex flex-row items-center px-10 py-6">
-        <Image
+        <img
           width={40}
           height={40}
           src="/imgs/token_image.png"

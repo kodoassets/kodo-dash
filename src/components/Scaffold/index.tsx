@@ -31,11 +31,11 @@ const Scaffold = ({
         }`}
       >
         <Sidenav />
-        <div className="w-full pl-32 pr-16 md:px-8 lg:px-16 xl:px-32">
+        <div className="w-full pl-32 pr-16 md:px-8 lg:px-16 xl:px-32 pb-16">
           <div className="mb-16 bg-transparent">
             {hasPropertySelector ? (
               <div className="flex items-center mt-20 text-5xl uppercase font-light">
-                <Image
+                <img
                   width={80}
                   height={80}
                   src="/imgs/token_image.png"

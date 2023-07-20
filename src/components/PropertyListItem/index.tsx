@@ -23,7 +23,7 @@ const offerStatusToLabel: { [key: string]: string } = {
 const PropertyListItem = ({ property }: PropertyListItemProps) => {
   return (
     <div className="flex flex-row bg-gradient py-4 px-8 mb-4 rounded-lg">
-      <Image
+      <img
         width={32}
         height={32}
         src="/imgs/token_image.png"

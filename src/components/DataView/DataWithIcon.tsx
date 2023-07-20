@@ -15,11 +15,11 @@ const LabeledValue = ({ label, value, subtitle, src, className }: Props) => {
         className || ""
       }`}
     >
-      <Image width={72} height={72} src={src} alt="" className="mr-4" />
+      <img width={64} height={64} src={src} alt="" className="mr-4" />
       <div className="flex flex-col">
         <span className="text-white text-sm font-light">{label}</span>
         <span className="text-lg text-gradient">{value}</span>
-        <span className="text-white font-bold">{subtitle}</span>
+        <span className="text-white font-medium">{subtitle}</span>
       </div>
     </div>
   );
