@@ -1,5 +1,7 @@
-import { Chart, ArcElement, ChartDataset } from "chart.js";
-Chart.register(ArcElement);
+import { Chart, ArcElement, ChartDataset, Legend, Tooltip } from "chart.js";
+import ChartDataLabels from "chartjs-plugin-datalabels";
+
+Chart.register(ArcElement, Legend, ChartDataLabels, Tooltip);
 import { Pie } from "react-chartjs-2";
 
 type Props = {
@@ -9,23 +11,59 @@ type Props = {
 
 const PieChart = ({ labels, datasets }: Props) => {
   return (
-    <div className="flex flex-col">
-      <div className="w-[170px] h-[170px]">
-        <Pie
-          options={{
-            plugins: {
-              legend: {
-                display: false,
+    <Pie
+      options={{
+        plugins: {
+          datalabels: {
+            color: "#fff",
+            formatter: function (value: number, context: any) {
+              const dataset = context.chart.data.datasets[context.datasetIndex];
+              const total = dataset.data.reduce(
+                (acc: number, val: number) => acc + val,
+                0
+              );
+
+              if (value < 1) {
+                return "";
+              }
+
+              const percentage = Math.round((value / total) * 100);
+
+              return `${percentage}%`;
+            },
+          },
+          tooltip: {
+            enabled: true,
+            usePointStyle: true,
+          },
+
+          legend: {
+            display: true,
+            align: "start",
+            position: "bottom",
+
+            labels: {
+              padding: 14,
+              boxHeight: 8,
+              useBorderRadius: true,
+              usePointStyle: true,
+
+              color: "#7896A1",
+              font: {
+                size: 14,
+                weight: "400",
+                lineHeight: 1.2,
+                style: "normal",
               },
             },
-          }}
-          data={{
-            labels,
-            datasets,
-          }}
-        />
-      </div>
-    </div>
+          },
+        },
+      }}
+      data={{
+        labels,
+        datasets,
+      }}
+    />
   );
 };
 

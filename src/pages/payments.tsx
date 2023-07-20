@@ -82,20 +82,16 @@ export default function Home() {
         <div className="flex flex-col items-start text-white bg-gradient-2 rounded-lg py-4 px-8 w-full col-span-2">
           <p className="mb-4">Payments per Country</p>
           <div className="grid grid-cols-2 mt-4">
-            <div>
+            <div className="h-[264px]">
               <PieChart
                 labels={data?.totalPerCountry?.map((row) => row.Country)}
                 datasets={[
                   {
                     data: data?.totalPerCountry?.map((row) => row.TotalSold),
+                    backgroundColor: ["#000F14", "#00AEEF", "#4C2D9A"],
                   },
                 ]}
               />
-              <div className="grid grid-cols-2 gap-x-8 gap-y-2 mt-4">
-                {data?.totalPerCountry?.map((l) => (
-                  <span key={l}>{l.Country}</span>
-                ))}
-              </div>
             </div>
             <div>
               <table className="w-full font-light">

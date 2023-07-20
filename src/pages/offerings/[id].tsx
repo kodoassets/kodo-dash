@@ -81,7 +81,7 @@ export default function Home() {
         progress={Number(((totalTokensSold / totalSupply) * 100).toFixed(2))}
       />
 
-      <div className="grid grid-cols-4">
+      <div className="grid grid-cols-4 gap-8">
         <PieChartData
           title="Payment Method"
           labels={["USDC", "ETHEREUM", "USDT", "POLYGON"]}
@@ -89,12 +89,12 @@ export default function Home() {
             {
               label: "Per Blockchain",
               data: [perBlockchain?.ETHEREUM, perBlockchain?.POLYGON],
-              backgroundColor: ["#065F70", "#A314AB", "#1255F1"],
+              backgroundColor: ["#000F14", "#00AEEF", "#4C2D9A"],
             },
             {
               label: "Per Coin",
               data: [perCoin?.USDC, perCoin?.USDT],
-              backgroundColor: ["#065F70", "#A314AB", "#1255F1"],
+              backgroundColor: ["#000F14", "#00AEEF", "#4C2D9A"],
             },
           ]}
         />
@@ -109,7 +109,7 @@ export default function Home() {
               data: propertyData.data.paymentsPerCountry.map(
                 (country) => country.count
               ),
-              backgroundColor: ["#065F70", "#A314AB", "#1255F1"],
+              backgroundColor: ["#000F14", "#00AEEF", "#4C2D9A"],
             },
           ]}
         />
@@ -124,7 +124,7 @@ export default function Home() {
               data: propertyData.data.usersPerCountry.map(
                 (country) => country.count
               ),
-              backgroundColor: ["#065F70", "#A314AB", "#1255F1"],
+              backgroundColor: ["#000F14", "#00AEEF", "#4C2D9A"],
             },
           ]}
         />
