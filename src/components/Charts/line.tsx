@@ -32,10 +32,10 @@ const LineChart = ({
 }) => {
   const chartData = {
     labels: data.labels,
+
     datasets: data.datasets.map((dataset) => ({
       data: dataset,
-      fill: true,
-      tension: 0.1,
+      tension: 0,
       borderColor: "rgba(255, 255, 255, 1)",
       backgroundColor: "#00AEEF",
       borderWidth: 3,
@@ -43,6 +43,10 @@ const LineChart = ({
       pointRadius: 10,
       pointHoverRadius: 15,
     })),
+    interaction: {
+      mode: "index",
+      intersect: false,
+    },
   };
 
   const options = {
@@ -52,20 +56,19 @@ const LineChart = ({
 
         grid: {
           display: true,
-          drawOnChartArea: true,
           borderDash: [25, 25],
 
-          color: "rgba(255, 255, 255, 0.16)",
+          color: "rgba(255, 255, 255, 0.08)",
         },
       },
       y: {
         display: true,
         grid: {
           display: true,
-          drawOnChartArea: true,
+
           borderDash: [25, 25],
 
-          color: "rgba(255, 255, 255, 0.16)",
+          color: "rgba(255, 255, 255, 0.08)",
         },
       },
     },

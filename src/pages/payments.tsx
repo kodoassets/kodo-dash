@@ -8,12 +8,24 @@ import PieChart from "@/components/Charts/pie";
 import ProgressBar from "@/components/ProgressBar";
 import { useEffect, useState } from "react";
 import LineChart from "@/components/Charts/line";
+import { PeriodButton } from "@/components/Button/PeriodButton";
 
 export default function Home() {
   const [showModal, setShowModal] = useState(false);
   const [modalContent, setModalContent] = useState(0);
 
   const [selectedPeriod, setSelectedPeriod] = useState(3);
+
+  const [startDate, setStartDate] = useState(
+    `${new Date().getFullYear()}-01-01`
+  );
+  const [endDate, setEndDate] = useState(`${new Date().getFullYear()}-12-31`);
+
+  const handleDateChange = (newStartDate: any, newEndDate: any) => {
+    setStartDate(newStartDate);
+    setEndDate(newEndDate);
+    refetch();
+  };
 
   const periodsList = [
     {
@@ -80,7 +92,7 @@ export default function Home() {
       queryFn: () =>
         axios
           .get(
-            `${process.env.NEXT_PUBLIC_API_URL}/backoffice/payments/timeframes?dateFrom=2023-01-01T00:00:00.000Z&dateTo=2023-12-31T00:00:00.000Z&frame=${periodsList[selectedPeriod].value}`,
+            `${process.env.NEXT_PUBLIC_API_URL}/backoffice/payments/timeframes?dateFrom=${startDate}T00:00:00.000Z&dateTo=${endDate}T00:00:00.000Z&frame=${periodsList[selectedPeriod].value}`,
             {
               headers: {
                 // "X-signed-message": signedMessage,
@@ -120,6 +132,13 @@ export default function Home() {
   return (
     <Scaffold title="Payments" className="truncate">
       <div className="grid gap-8">
+        <div className="bg-gradient-2 py-6 px-8 text-white text-start rounded-2xl flex justify-end items-center gap-8">
+          <PeriodButton
+            startDate={new Date(new Date().getFullYear(), 0, 1)}
+            endDate={new Date(new Date().getFullYear(), 11, 31)}
+            onDateChange={handleDateChange}
+          />
+        </div>
         <div className="bg-gradient-2 py-6 px-8 text-white text-start rounded-2xl">
           <div className="flex flex-row justify-end items-center py-4">
             <div className="flex flex-row gap-4">
@@ -128,9 +147,9 @@ export default function Home() {
                   key={index}
                   className={`${
                     selectedPeriod === index
-                      ? "border border-[#00AEEF] text-white"
-                      : "border border-[#7896A1] text-[#7896A1]"
-                  } px-4 py-2 rounded-lg text-sm`}
+                      ? "border-2 border-[#00AEEF] text-white"
+                      : "border-2 border-[#7896A1] text-[#7896A1]"
+                  } px-4 py-1 rounded-xl text-sm`}
                   onClick={() => {
                     setSelectedPeriod(index);
                   }}
@@ -142,11 +161,37 @@ export default function Home() {
           </div>
           <LineChart
             data={{
-              labels: paymentsOvertimeData?.data?.map((data: any) =>
-                new Date(data.date).toLocaleDateString()
-              ),
+              labels: paymentsOvertimeData?.data?.map((data: any) => {
+                switch (periodsList[selectedPeriod].value) {
+                  case "daily":
+                    return new Date(data.date).getDay();
+
+                  case "weekly":
+                    return `Week ${new Date(data.date).toLocaleDateString()}`;
+
+                  case "monthly":
+                    return new Date(data.date)
+                      .toLocaleDateString("en-US", {
+                        month: "short",
+                      })
+                      .toUpperCase();
+
+                  case "quarterly":
+                    return `Q${Math.ceil(
+                      (new Date(data.date).getMonth() + 1) / 3
+                    )} ${new Date(data.date).getFullYear()}`;
+
+                  case "yearly":
+                    return new Date(data.date).getFullYear();
+
+                  default:
+                    return new Date(data.date).toLocaleDateString();
+                }
+              }),
               datasets: [
-                paymentsOvertimeData?.data?.map((data: any) => data.total),
+                paymentsOvertimeData?.data?.map((data: any) =>
+                  data.total.toFixed(2)
+                ),
               ],
             }}
           />
