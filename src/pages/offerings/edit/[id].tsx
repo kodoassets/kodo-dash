@@ -42,7 +42,8 @@ const PropertyPage = () => {
 
   const { steps, statuses } = data;
   const allStepsFinished = property.configurationSteps.every(
-    (step: ConfigurationStepStatus) => step.status === "COMPLETE"
+    (step: ConfigurationStepStatus) =>
+      step.status === "COMPLETE" || step.status === "OPTIONAL"
   );
 
   if (!property.configurationSteps) return null;
@@ -98,6 +99,7 @@ const PropertyPage = () => {
           </>
         )}
       </Card>
+
       {steps.map((step, index) => (
         <OfferingStep
           key={step.label}

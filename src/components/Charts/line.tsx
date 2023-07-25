@@ -27,36 +27,34 @@ const LineChart = ({
 }: {
   data: {
     labels: string[];
-    dataset1: number[];
-    dataset2: number[];
+    datasets: [number[]];
   };
 }) => {
   const chartData = {
     labels: data.labels,
-    datasets: [
-      {
-        label: "Dataset 1",
-        data: data.dataset1,
-        fill: false,
-        borderColor: "rgba(192, 75, 75, 1)",
-      },
-      {
-        label: "Dataset 2",
-        data: data.dataset2,
-        fill: false,
-        borderColor: "rgba(75, 192, 192, 1)",
-      },
-    ],
+    datasets: data.datasets.map((dataset) => ({
+      data: dataset,
+      fill: false,
+      tension: 0.2,
+      borderColor: "rgba(255, 255, 255, 1)",
+      backgroundColor: "#00AEEF",
+      borderWidth: 3,
+      pointStyle: "circle",
+      pointRadius: 10,
+      pointHoverRadius: 15,
+    })),
   };
 
   const options = {
     scales: {
       x: {
         display: true,
+
         grid: {
           display: true,
           drawOnChartArea: true,
           borderDash: [25, 25],
+
           color: "rgba(255, 255, 255, 0.16)",
         },
       },

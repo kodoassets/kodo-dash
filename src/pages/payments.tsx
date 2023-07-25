@@ -5,8 +5,22 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import PieChartData from "@/components/DataView/PieChartData";
 import PieChart from "@/components/Charts/pie";
+import ProgressBar from "@/components/ProgressBar";
+import { useState } from "react";
 
 export default function Home() {
+  const [showModal, setShowModal] = useState(false);
+  const [modalContent, setModalContent] = useState(0);
+
+  const handleMouseEnter = (index: number) => {
+    setModalContent(index);
+    setShowModal(true);
+  };
+
+  const handleMouseLeave = () => {
+    setShowModal(false);
+  };
+
   // useAuth(["viewUsers"]);
   const { address } = useAccount();
 
@@ -22,7 +36,19 @@ export default function Home() {
         .then((res) => res.data),
   });
 
-  if (!data) return null;
+  const { data: affiliatesData } = useQuery(["affiliates"], {
+    queryFn: () =>
+      axios
+        .get(`${process.env.NEXT_PUBLIC_API_URL}/backoffice/affiliates`, {
+          headers: {
+            // "X-signed-message": signedMessage,
+            "X-wallet-address": address,
+          },
+        })
+        .then((res) => res.data),
+  });
+
+  if (!data || !affiliatesData) return null;
 
   const perCoin = {
     labels: ["USDC", "USDT", "BUSD"],
@@ -56,9 +82,9 @@ export default function Home() {
               datasets={[perCoin]}
               labels={perCoin.labels}
             />
-            <div className="grid grid-rows-2 gap-4">
+            <div className="grid grid-rows-2 gap-6">
               <div className="bg-gradient-2 py-6 px-8 text-white text-start rounded-2xl h-full">
-                <p>Payments received</p>
+                <p className="mb-6 text-xl font-thin">Payments received</p>
                 <div className="flex flex-row justify-between w-full mt-4">
                   <p className="text-[#7896A1]">Total</p>
                   <p className="text-[#F8F8F8] font-regular">
@@ -71,7 +97,7 @@ export default function Home() {
                 </div>
               </div>
               <div className="bg-gradient-2 py-6 px-8 text-white text-start rounded-2xl h-full">
-                <p>Payments sent</p>
+                <p className="mb-6 text-xl font-thin">Payments sent</p>
                 <div className="flex flex-row justify-between w-full mt-4">
                   <p className="text-[#7896A1]">Total</p>
                   <p className="text-[#F8F8F8] font-regular">N/A</p>
@@ -83,8 +109,8 @@ export default function Home() {
               </div>
             </div>
           </div>
-          <div className="flex flex-col items-start text-white bg-gradient-2 rounded-lg py-4 px-8 w-full col-span-2">
-            <p className="mb-4">Payments per Country</p>
+          <div className="flex flex-col items-start text-white bg-gradient-2 rounded-2xl py-6 px-8 w-full col-span-2">
+            <p className="mb-4 text-xl font-thin">Payments per Country</p>
             <div className="grid grid-cols-2 mt-4">
               <div className="h-[264px]">
                 <PieChart
@@ -101,7 +127,7 @@ export default function Home() {
               </div>
               <div>
                 <table className="w-full font-light">
-                  <thead>
+                  <thead className="text-[#7896A1]">
                     <tr>
                       <th className="text-left pb-4 font-extralight text-lg">
                         Country
@@ -114,7 +140,7 @@ export default function Home() {
                       </th>
                     </tr>
                   </thead>
-                  <tbody>
+                  <tbody className="relative">
                     {data?.totalPerCountry
                       ?.sort(
                         (a: { TotalSold: number }, b: { TotalSold: number }) =>
@@ -123,7 +149,9 @@ export default function Home() {
                       .map((row: any, index: number) => (
                         <tr
                           key={row.country}
-                          className="bg-[#000F14] h-7 text-sm"
+                          className="bg-[#000F14] h-7 text-sm relative"
+                          onMouseEnter={() => handleMouseEnter(index)}
+                          onMouseLeave={handleMouseLeave}
                         >
                           <td className="text-left w-48 px-3 rounded-tl-2xl rounded-bl-2xl py-2">
                             {index + 1} - {row.Country}
@@ -142,11 +170,87 @@ export default function Home() {
                       ))}
                   </tbody>
                 </table>
+                {showModal && (
+                  <div className="absolute top-0 bg-gradient-2 p-4 border border-white/20 rounded-2xl backdrop-blur-md">
+                    <div className="text-center mb-4">
+                      <p className="font-light text-sm text-[#7896A1]">
+                        Top Methods
+                      </p>
+                      <p className="font-medium text-xl">
+                        {data?.totalPerCountry[modalContent].Country}
+                      </p>
+                    </div>
+                    {["USDC", "USDT", "BUSD"].map((coin, index) => (
+                      <div
+                        className="bg-[#000F14] flex items-center gap-4 w-56 justify-between mt-2 px-3 rounded-lg"
+                        key={index}
+                      >
+                        <div className="flex items-center gap-3">
+                          <div className="bg-[#00AEEF] w-4 h-4 rounded-full" />
+                          <span>{coin}</span>
+                        </div>
+                        <div>
+                          {(
+                            (data?.totalPerCountry[modalContent].perCoin?.[
+                              coin
+                            ] /
+                              data?.totalPerCountry[modalContent].TotalSold) *
+                            100
+                          ).toFixed(2)}
+                          %
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
           </div>
         </div>
+        <div className="bg-gradient-2 py-6 px-8 text-white text-start rounded-2xl h-full">
+          <p className="mb-6 text-xl font-thin">Affiliates Comission</p>
+          <div>
+            <div className="flex flex-row justify-between w-full mt-4">
+              <p className="text-[#7896A1]">Claimed</p>
+              <p className="text-[#F8F8F8] font-regular">
+                $
+                {affiliatesData?.affiliatesComission?.claimed?.toLocaleString()}
+              </p>
+            </div>
+            <div className="w-full bg-[#000F1480] h-12 mt-4 rounded-lg">
+              <ProgressBar
+                className="h-12 rounded-lg"
+                progress={
+                  (affiliatesData?.affiliatesComission?.claimed /
+                    (affiliatesData?.affiliatesComission?.claimed +
+                      affiliatesData?.affiliatesComission?.due)) *
+                  100
+                }
+              />
+            </div>
+          </div>
+          <div>
+            <div className="flex flex-row justify-between w-full mt-4">
+              <p className="text-[#7896A1]">Due</p>
+              <p className="text-[#F8F8F8] font-regular">
+                ${affiliatesData?.affiliatesComission?.due}
+              </p>
+            </div>
+            <div className="w-full bg-[#000F1480] h-12 mt-4 rounded-lg">
+              <ProgressBar
+                className="h-12 rounded-lg"
+                progress={
+                  (affiliatesData?.affiliatesComission?.due /
+                    (affiliatesData?.affiliatesComission?.claimed +
+                      affiliatesData?.affiliatesComission?.due)) *
+                  100
+                }
+              />
+            </div>
+          </div>
+        </div>
       </div>
+
       {/* <div className="flex flex-row gap-8 flex-wrap mt-8">
         <PieChartData
           title="Payment per Blockchain"

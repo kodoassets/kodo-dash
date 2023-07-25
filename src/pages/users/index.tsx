@@ -23,20 +23,23 @@ export default function Home() {
         .then((res) => res.data),
   });
 
-  console.log(data);
-  const { data: stats } = useQuery(["other"], {
+  const { data: usersOvertime } = useQuery(["usersOvertime"], {
     queryFn: () =>
       axios
-        .get(`${process.env.NEXT_PUBLIC_API_URL}/backoffice/payments`, {
-          headers: {
-            // "X-signed-message": signedMessage,
-            "X-wallet-address": address,
-          },
-        })
+        .get(
+          `${process.env.NEXT_PUBLIC_API_URL}/backoffice/users/timeframes?dateFrom=2023-01-01T17:11:41.458Z&dateTo=2023-07-18T17:11:41.458Z&frame=monthly`,
+          {
+            headers: {
+              // "X-signed-message": signedMessage,
+              "X-wallet-address": address,
+            },
+          }
+        )
         .then((res) => res.data),
   });
 
-  if (!stats) return null;
+  console.log(usersOvertime);
+  if (!usersOvertime) return null;
 
   const getRandomColor = () => {
     const letters = "0123456789ABCDEF";
@@ -58,14 +61,9 @@ export default function Home() {
             subtitle={`all time`}
             src="/imgs/tokens_sold.png"
           />
+
           <DataWithIcon
-            label="Active Users"
-            value={data?.activeUsers || "-"}
-            subtitle={`of ${data?.activeUsers}`}
-            src="/imgs/total_revenue.png"
-          />
-          <DataWithIcon
-            label="Average Tokens"
+            label="Average Tokens Both"
             value={data?.avgTokensPerUser?.toFixed(2) || "-"}
             subtitle={"per user"}
             src="/imgs/token_price.png"
@@ -78,61 +76,83 @@ export default function Home() {
           />
         </div>
 
-        <div className="grid grid-cols-3">
-          <div className="max-w-[320px] text-center">
-            <p className="text-white font-light text-sm mb-2">
-              Users per Token
-            </p>
-            <div className="bg-gradient-2 rounded-lg p-4 ">
-              {data?.usersPerToken?.map((Data: any) => (
-                <div key={Data.propertyId} className="flex flex-row mt-2">
-                  <span className="text-white bg-[#00AEEF] rounded-lg p-1 mr-2 text-xs min-w-[80px]">
-                    {Data.tokenSymbol}
-                  </span>
-                  <ProgressBar
-                    progress={
-                      +(
-                        (Data.userWalletCount * 100) /
-                        data.activeUsers
-                      ).toFixed(0)
-                    }
-                    innerLabel={Data.userWalletCount.toString()}
-                  />
-                  <span className="text-[#7896A1] bg-[#000F14] rounded-lg p-1 ml-2 min-w-[40px] text-xs">
-                    {((Data.userWalletCount * 100) / data.activeUsers).toFixed(
-                      0
-                    )}
-                    %
-                  </span>
-                </div>
-              ))}
+        <div className="grid grid-cols-2 gap-6">
+          <div className=" text-center">
+            <p className="text-white font-light text-sm mb-2">Users Overtime</p>
+            <div className="grid grid-cols-3 gap-4 w-full bg-gradient-2 py-6 px-8 text-white text-start rounded-2xl h-[400px]">
+              <div className="col-span-2 flex items-center">
+                <LineChart
+                  data={{
+                    labels: usersOvertime?.data?.map((data: any) =>
+                      new Date(data.date).toLocaleDateString()
+                    ),
+                    datasets: [
+                      usersOvertime?.data?.map((data: any) => data.activeUsers),
+                    ],
+                  }}
+                />
+              </div>
+              <div className="col-span-1 border">afa</div>
             </div>
           </div>
-          <div className="max-w-[320px] text-center">
-            <p className="text-white font-light text-sm mb-2">
-              Users per Country
-            </p>
-            <div className="bg-gradient-2 rounded-lg p-4 ">
-              {data?.usersPerCountry?.map((Data: any) => (
-                <div key={Data._id} className="flex flex-row mt-2">
-                  <span className="text-white bg-[#00AEEF] rounded-lg p-1 mr-2 text-xs min-w-[80px]">
-                    {Data._id}
-                  </span>
-                  <ProgressBar
-                    progress={
-                      +((Data.count * 100) / data.activeUsers).toFixed(0)
-                    }
-                    innerLabel={Data.count.toString()}
-                  />
-                  <span className="text-[#7896A1] bg-[#000F14] rounded-lg p-1 ml-2 min-w-[40px] text-xs">
-                    {((Data.count * 100) / data.activeUsers).toFixed(0)}%
-                  </span>
-                </div>
-              ))}
+
+          <div className="grid grid-cols-2">
+            <div className="text-center">
+              <p className="text-white font-light text-sm mb-2">
+                Users per Token
+              </p>
+              <div className="bg-gradient-2 rounded-lg p-4 ">
+                {data?.usersPerToken?.map((Data: any) => (
+                  <div key={Data.propertyId} className="flex flex-row mt-2">
+                    <span className="text-white bg-[#00AEEF] rounded-lg p-1 mr-2 text-xs min-w-[80px]">
+                      {Data.tokenSymbol}
+                    </span>
+                    <ProgressBar
+                      progress={
+                        +(
+                          (Data.userWalletCount * 100) /
+                          data.activeUsers
+                        ).toFixed(0)
+                      }
+                      innerLabel={Data.userWalletCount.toString()}
+                    />
+                    <span className="text-[#7896A1] bg-[#000F14] rounded-lg p-1 ml-2 min-w-[40px] text-xs">
+                      {(
+                        (Data.userWalletCount * 100) /
+                        data.activeUsers
+                      ).toFixed(0)}
+                      %
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className=" text-center">
+              <p className="text-white font-light text-sm mb-2">
+                Users per Country
+              </p>
+              <div className="bg-gradient-2 rounded-lg p-4 ">
+                {data?.usersPerCountry?.map((Data: any) => (
+                  <div key={Data._id} className="flex flex-row mt-2">
+                    <span className="text-white bg-[#00AEEF] rounded-lg p-1 mr-2 text-xs min-w-[80px]">
+                      {Data._id}
+                    </span>
+                    <ProgressBar
+                      progress={
+                        +((Data.count * 100) / data.activeUsers).toFixed(0)
+                      }
+                      innerLabel={Data.count.toString()}
+                    />
+                    <span className="text-[#7896A1] bg-[#000F14] rounded-lg p-1 ml-2 min-w-[40px] text-xs">
+                      {((Data.count * 100) / data.activeUsers).toFixed(0)}%
+                    </span>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>
-        <div className="bg-gradient-2 py-6 px-8 text-white text-start rounded-2xl h-[400px]">
+        {/* <div className="bg-gradient-2 py-6 px-8 text-white text-start rounded-2xl h-[400px]">
           <div className="grid grid-cols-3 mt-4 gap-9">
             <div className="col-span-1">
               <table className="w-full font-light">
@@ -208,7 +228,7 @@ export default function Home() {
               />
             </div>
           </div>
-        </div>
+        </div> */}
       </main>
     </Scaffold>
   );

@@ -41,7 +41,7 @@ const Offerings = () => {
           />
           <DataWithIcon
             label="Total Value"
-            value={(avgTokenPrice * totalSupply).toLocaleString() || "-"}
+            value={(totalSupply * avgTokenPrice).toLocaleString() || "-"}
             subtitle={`USD`}
             src="/imgs/total_value.png"
           />
@@ -74,6 +74,9 @@ const Offerings = () => {
               </th>
               <th className="text-center pb-6 font-extralight text-md">
                 Status
+              </th>
+              <th className="text-center pb-6 font-extralight text-md">
+                Actions
               </th>
             </tr>
           </thead>

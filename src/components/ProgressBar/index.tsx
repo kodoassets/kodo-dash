@@ -7,7 +7,7 @@ type Props = {
 };
 
 const ProgressBar = ({ progress, innerLabel, className }: Props) => {
-  if (!innerLabel) innerLabel = `${progress}%`;
+  if (!innerLabel) innerLabel = `${progress.toLocaleString()}%`;
   return (
     <div
       className={clsx(
@@ -16,12 +16,12 @@ const ProgressBar = ({ progress, innerLabel, className }: Props) => {
       )}
     >
       <div
-        className={`absolute left-0 h-[22px] rounded-[71px] bg-progress transition-width duration-[1500ms] ease-in-out flex flex-row items-center`}
+        className={`absolute left-0 h-full rounded-lg bg-progress transition-width duration-[1500ms] ease-in-out flex flex-row items-center`}
         style={{ width: `${progress}%` }}
       ></div>
       <div
         className={clsx(
-          "absolute right-0 h-[22px] progress-gradient transition-width duration-[1500ms] ease-in-out",
+          "absolute right-0 h-full progress-gradient transition-width duration-[1500ms] ease-in-out",
           progress === 0 ? "rounded-[71px]" : `rounded-r-[71px]`
         )}
         style={{ width: `${100 - progress}%` }}

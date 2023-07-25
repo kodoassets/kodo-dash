@@ -8,7 +8,7 @@ export type ConfigurationStep =
 
 export interface ConfigurationStepStatus {
   step: ConfigurationStep;
-  status: "COMPLETE" | "INCOMPLETE";
+  status: "COMPLETE" | "INCOMPLETE" | "OPTIONAL";
   errors: string[];
 }
 

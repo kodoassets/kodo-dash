@@ -46,17 +46,7 @@ const PropertyList = ({ property }: PropertyListItemProps) => {
   const propertyStatus = statusMap[status];
 
   return (
-    <tr
-      className="bg-gradient hover:cursor-pointer border border-white/10 rounded-xl "
-      onClick={() =>
-        property.status === "DRAFT"
-          ? Router.push(
-              "/offerings/edit/[id]",
-              `/offerings/edit/${property._id}`
-            )
-          : Router.push("/offerings/[id]", `/offerings/${property._id}`)
-      }
-    >
+    <tr className="bg-gradient border border-white/10 rounded-xl ">
       <td className="flex flex-row items-center px-10 py-6">
         <img
           width={40}
@@ -67,10 +57,10 @@ const PropertyList = ({ property }: PropertyListItemProps) => {
         />
         {property.contract.tokenSymbol}
       </td>
-      <td className="text-center w-64">
+      <td className="text-center w-48">
         ${parseFloat(property.tokenPriceInUsd).toLocaleString()}
       </td>
-      <td className="text-center w-64">
+      <td className="text-center w-48">
         {parseFloat(property.contract.totalSupply).toLocaleString()}
       </td>
       <td className="px-8 w-64">
@@ -95,6 +85,31 @@ const PropertyList = ({ property }: PropertyListItemProps) => {
           />
           {propertyStatus.label || "unknown"}
         </div>
+      </td>
+      <td className="text-center w-64 gap-8">
+        {property.status === "SALE" && (
+          <>
+            <button
+              onClick={() => {
+                Router.push("/offerings/[id]", `/offerings/${property._id}`);
+              }}
+            >
+              View
+            </button>
+            <span> | </span>
+          </>
+        )}
+
+        <button
+          onClick={() =>
+            Router.push(
+              "/offerings/edit/[id]",
+              `/offerings/edit/${property._id}`
+            )
+          }
+        >
+          Edit
+        </button>
       </td>
     </tr>
   );
