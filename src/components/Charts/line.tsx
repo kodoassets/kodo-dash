@@ -34,8 +34,8 @@ const LineChart = ({
     labels: data.labels,
     datasets: data.datasets.map((dataset) => ({
       data: dataset,
-      fill: false,
-      tension: 0.2,
+      fill: true,
+      tension: 0.1,
       borderColor: "rgba(255, 255, 255, 1)",
       backgroundColor: "#00AEEF",
       borderWidth: 3,
@@ -59,7 +59,14 @@ const LineChart = ({
         },
       },
       y: {
-        display: false,
+        display: true,
+        grid: {
+          display: true,
+          drawOnChartArea: true,
+          borderDash: [25, 25],
+
+          color: "rgba(255, 255, 255, 0.16)",
+        },
       },
     },
     plugins: {

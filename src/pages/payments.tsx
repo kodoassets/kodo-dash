@@ -6,11 +6,37 @@ import axios from "axios";
 import PieChartData from "@/components/DataView/PieChartData";
 import PieChart from "@/components/Charts/pie";
 import ProgressBar from "@/components/ProgressBar";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import LineChart from "@/components/Charts/line";
 
 export default function Home() {
   const [showModal, setShowModal] = useState(false);
   const [modalContent, setModalContent] = useState(0);
+
+  const [selectedPeriod, setSelectedPeriod] = useState(3);
+
+  const periodsList = [
+    {
+      label: "D",
+      value: "daily",
+    },
+    {
+      label: "W",
+      value: "weekly",
+    },
+    {
+      label: "M",
+      value: "monthly",
+    },
+    {
+      label: "Q",
+      value: "quarterly",
+    },
+    {
+      label: "Y",
+      value: "yearly",
+    },
+  ];
 
   const handleMouseEnter = (index: number) => {
     setModalContent(index);
@@ -48,7 +74,29 @@ export default function Home() {
         .then((res) => res.data),
   });
 
-  if (!data || !affiliatesData) return null;
+  const { data: paymentsOvertimeData, refetch } = useQuery(
+    ["paymentsOvertime"],
+    {
+      queryFn: () =>
+        axios
+          .get(
+            `${process.env.NEXT_PUBLIC_API_URL}/backoffice/payments/timeframes?dateFrom=2023-01-01T00:00:00.000Z&dateTo=2023-12-31T00:00:00.000Z&frame=${periodsList[selectedPeriod].value}`,
+            {
+              headers: {
+                // "X-signed-message": signedMessage,
+                "X-wallet-address": address,
+              },
+            }
+          )
+          .then((res) => res.data),
+    }
+  );
+
+  useEffect(() => {
+    refetch();
+  }, [refetch, selectedPeriod]);
+
+  if (!data || !affiliatesData || !paymentsOvertimeData) return null;
 
   const perCoin = {
     labels: ["USDC", "USDT", "BUSD"],
@@ -72,9 +120,37 @@ export default function Home() {
   return (
     <Scaffold title="Payments" className="truncate">
       <div className="grid gap-8">
-        {/* <div className="bg-gradient-2 py-6 px-8 text-white text-start rounded-2xl h-[600px]">
-          graph here
-        </div> */}
+        <div className="bg-gradient-2 py-6 px-8 text-white text-start rounded-2xl">
+          <div className="flex flex-row justify-end items-center py-4">
+            <div className="flex flex-row gap-4">
+              {periodsList.map((period, index) => (
+                <button
+                  key={index}
+                  className={`${
+                    selectedPeriod === index
+                      ? "border border-[#00AEEF] text-white"
+                      : "border border-[#7896A1] text-[#7896A1]"
+                  } px-4 py-2 rounded-lg text-sm`}
+                  onClick={() => {
+                    setSelectedPeriod(index);
+                  }}
+                >
+                  {period.label}
+                </button>
+              ))}
+            </div>
+          </div>
+          <LineChart
+            data={{
+              labels: paymentsOvertimeData?.data?.map((data: any) =>
+                new Date(data.date).toLocaleDateString()
+              ),
+              datasets: [
+                paymentsOvertimeData?.data?.map((data: any) => data.total),
+              ],
+            }}
+          />
+        </div>
         <div className="grid grid-cols-4 gap-6">
           <div className="col-span-2 grid grid-cols-2 gap-6">
             <PieChartData
