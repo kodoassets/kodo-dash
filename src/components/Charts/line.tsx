@@ -52,7 +52,6 @@ const LineChart = ({
     })),
     interaction: {
       mode: "index",
-      intersect: false,
     },
   };
 
@@ -60,11 +59,9 @@ const LineChart = ({
     scales: {
       x: {
         display: true,
-
         grid: {
           display: true,
           borderDash: [25, 25],
-
           color: "rgba(255, 255, 255, 0.08)",
         },
       },
@@ -72,9 +69,7 @@ const LineChart = ({
         display: true,
         grid: {
           display: true,
-
           borderDash: [25, 25],
-
           color: "rgba(255, 255, 255, 0.08)",
         },
       },

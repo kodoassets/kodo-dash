@@ -101,7 +101,7 @@ export const PrimaryUsersPerCountryOvertime = () => {
                 <div className="bg-gradient-2 rounded-md">%</div>
               </th>
               <th className="text-center pb-4 font-extralight text-md">
-                <div className="bg-gradient-2 rounded-md">Avg Invest</div>
+                <div className="bg-gradient-2 rounded-md">Users</div>
               </th>
             </tr>
           </thead>
@@ -117,10 +117,10 @@ export const PrimaryUsersPerCountryOvertime = () => {
                   <div className="relative bg-[#000F1480] px-4 py-1 rounded-md">
                     <div className="flex justify-between relative z-50">
                       <span>{country.toUpperCase()}</span>
-                      <span>
+                      {/* <span>
                         {data?.data?.map((data: any) => data[country]).pop() ||
                           0}
-                      </span>
+                      </span> */}
                     </div>
                     <div
                       className="absolute top-0 left-0 bottom-0 h-full bg-[#00AEEF] z-1 rounded-md"
@@ -155,9 +155,11 @@ export const PrimaryUsersPerCountryOvertime = () => {
                       .pop() || 0}
                   </div>
                 </td>
-                <td className="text-left px-1 w-28">
+                <td className="text-center px-1 w-28">
                   <div className="relative bg-[#000F1480] px-4 py-1 rounded-md">
-                    1 %
+                    <span>
+                      {data?.data?.map((data: any) => data[country]).pop() || 0}
+                    </span>
                   </div>
                 </td>
               </tr>
