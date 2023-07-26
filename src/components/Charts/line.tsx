@@ -27,17 +27,24 @@ const LineChart = ({
 }: {
   data: {
     labels: string[];
-    datasets: [number[]];
+    datasets: [
+      {
+        data: number[];
+        label?: string;
+        backgroundColor?: string;
+      }
+    ];
   };
 }) => {
   const chartData = {
     labels: data.labels,
 
     datasets: data.datasets.map((dataset) => ({
-      data: dataset,
+      data: dataset.data,
+      label: dataset.label,
       tension: 0,
-      borderColor: "rgba(255, 255, 255, 1)",
-      backgroundColor: "#00AEEF",
+      borderColor: dataset.backgroundColor || "#fff",
+      backgroundColor: dataset.backgroundColor || "#00AEEF",
       borderWidth: 3,
       pointStyle: "circle",
       pointRadius: 10,

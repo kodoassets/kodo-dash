@@ -6,6 +6,7 @@ import axios from "axios";
 import ProgressBar from "@/components/ProgressBar";
 import useAuth from "@/core/use-auth";
 import LineChart from "@/components/Charts/line";
+import { PrimaryUsersPerCountryOvertime } from "@/components/Graphs/users/PrimaryUsersPerCountryOvertime";
 
 export default function Home() {
   // useAuth(["viewUsers"]);
@@ -22,24 +23,6 @@ export default function Home() {
         })
         .then((res) => res.data),
   });
-
-  const { data: usersOvertime } = useQuery(["usersOvertime"], {
-    queryFn: () =>
-      axios
-        .get(
-          `${process.env.NEXT_PUBLIC_API_URL}/backoffice/users/timeframes?dateFrom=2023-01-01T17:11:41.458Z&dateTo=2023-07-18T17:11:41.458Z&frame=monthly`,
-          {
-            headers: {
-              // "X-signed-message": signedMessage,
-              "X-wallet-address": address,
-            },
-          }
-        )
-        .then((res) => res.data),
-  });
-
-  console.log(usersOvertime);
-  if (!usersOvertime) return null;
 
   const getRandomColor = () => {
     const letters = "0123456789ABCDEF";
@@ -77,25 +60,6 @@ export default function Home() {
         </div>
 
         <div className="grid grid-cols-2 gap-6">
-          <div className=" text-center">
-            <p className="text-white font-light text-sm mb-2">Users Overtime</p>
-            <div className="grid grid-cols-3 gap-4 w-full bg-gradient-2 py-6 px-8 text-white text-start rounded-2xl h-[400px]">
-              <div className="col-span-2 flex items-center">
-                <LineChart
-                  data={{
-                    labels: usersOvertime?.data?.map((data: any) =>
-                      new Date(data.date).toLocaleDateString()
-                    ),
-                    datasets: [
-                      usersOvertime?.data?.map((data: any) => data.activeUsers),
-                    ],
-                  }}
-                />
-              </div>
-              <div className="col-span-1 border">afa</div>
-            </div>
-          </div>
-
           <div className="grid grid-cols-2">
             <div className="text-center">
               <p className="text-white font-light text-sm mb-2">
@@ -152,6 +116,7 @@ export default function Home() {
             </div>
           </div>
         </div>
+        <PrimaryUsersPerCountryOvertime />
         {/* <div className="bg-gradient-2 py-6 px-8 text-white text-start rounded-2xl h-[400px]">
           <div className="grid grid-cols-3 mt-4 gap-9">
             <div className="col-span-1">

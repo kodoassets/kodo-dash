@@ -340,7 +340,7 @@ export default function Home() {
             </div>
             <div className="w-full bg-[#000F1480] h-12 mt-4 rounded-lg">
               <ProgressBar
-                className="h-12 rounded-lg"
+                className="!h-12 rounded-lg"
                 progress={
                   (affiliatesData?.affiliatesComission?.claimed /
                     (affiliatesData?.affiliatesComission?.claimed +
@@ -359,7 +359,7 @@ export default function Home() {
             </div>
             <div className="w-full bg-[#000F1480] h-12 mt-4 rounded-lg">
               <ProgressBar
-                className="h-12 rounded-lg"
+                className="!h-12 rounded-lg"
                 progress={
                   (affiliatesData?.affiliatesComission?.due /
                     (affiliatesData?.affiliatesComission?.claimed +
