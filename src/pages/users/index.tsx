@@ -60,18 +60,19 @@ export default function Home() {
         </div>
 
         <div className="grid grid-cols-2 gap-6">
-          <div className="grid grid-cols-2">
+          <div className="grid grid-cols-1">
             <div className="text-center">
               <p className="text-white font-light text-sm mb-2">
                 Users per Token
               </p>
-              <div className="bg-gradient-2 rounded-lg p-4 ">
+              <div className="bg-gradient-2 rounded-2xl p-8">
                 {data?.usersPerToken?.map((Data: any) => (
-                  <div key={Data.propertyId} className="flex flex-row mt-2">
-                    <span className="text-white bg-[#00AEEF] rounded-lg p-1 mr-2 text-xs min-w-[80px]">
+                  <div key={Data.propertyId} className="flex flex-row mt-4">
+                    <span className="text-white bg-[#00AEEF] rounded-lg p-2 mr-2 text-xs min-w-[90px]">
                       {Data.tokenSymbol}
                     </span>
                     <ProgressBar
+                      className="!h-8 rounded-lg"
                       progress={
                         +(
                           (Data.userWalletCount * 100) /
@@ -80,7 +81,7 @@ export default function Home() {
                       }
                       innerLabel={Data.userWalletCount.toString()}
                     />
-                    <span className="text-[#7896A1] bg-[#000F14] rounded-lg p-1 ml-2 min-w-[40px] text-xs">
+                    <span className="text-[#7896A1] bg-[#000F14] rounded-lg p-2 ml-2 min-w-[60px] text-xs">
                       {(
                         (Data.userWalletCount * 100) /
                         data.activeUsers
@@ -91,30 +92,8 @@ export default function Home() {
                 ))}
               </div>
             </div>
-            <div className=" text-center">
-              <p className="text-white font-light text-sm mb-2">
-                Users per Country
-              </p>
-              <div className="bg-gradient-2 rounded-lg p-4 ">
-                {data?.usersPerCountry?.map((Data: any) => (
-                  <div key={Data._id} className="flex flex-row mt-2">
-                    <span className="text-white bg-[#00AEEF] rounded-lg p-1 mr-2 text-xs min-w-[80px]">
-                      {Data._id}
-                    </span>
-                    <ProgressBar
-                      progress={
-                        +((Data.count * 100) / data.activeUsers).toFixed(0)
-                      }
-                      innerLabel={Data.count.toString()}
-                    />
-                    <span className="text-[#7896A1] bg-[#000F14] rounded-lg p-1 ml-2 min-w-[40px] text-xs">
-                      {((Data.count * 100) / data.activeUsers).toFixed(0)}%
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </div>
           </div>
+          z
         </div>
         <PrimaryUsersPerCountryOvertime />
         {/* <div className="bg-gradient-2 py-6 px-8 text-white text-start rounded-2xl h-[400px]">

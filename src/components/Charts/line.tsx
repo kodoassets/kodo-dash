@@ -22,9 +22,7 @@ Chart.register(
 );
 import { Line } from "react-chartjs-2";
 
-const LineChart = ({
-  data,
-}: {
+interface LineChartProps {
   data: {
     labels: string[];
     datasets: [
@@ -35,7 +33,10 @@ const LineChart = ({
       }
     ];
   };
-}) => {
+  externalTooltip?: React.ReactNode; // Allow users to pass external tooltip JSX
+}
+
+const LineChart: React.FC<LineChartProps> = ({ data, externalTooltip }) => {
   const chartData = {
     labels: data.labels,
 
@@ -77,12 +78,41 @@ const LineChart = ({
     plugins: {
       legend: {
         display: false,
-        // position: "bottom",
+      },
+      tooltip: {
+        enabled: externalTooltip ? false : true,
+        position: "nearest",
+        external: (context: { tooltip: { dataPoints: string | any[] } }) => {
+          const tooltipEl = document.getElementById("custom-tooltip");
+
+          if (tooltipEl) {
+            if (context.tooltip.dataPoints.length > 0) {
+              const label = context.tooltip.dataPoints[0].label;
+              const value = context.tooltip.dataPoints[0].formattedValue;
+              const { caretX, caretY } = context.tooltip;
+
+              // tooltipEl.innerHTML = `${label}: ${value}`;
+              tooltipEl.style.left = caretX + "px";
+              tooltipEl.style.top = caretY + "px";
+              tooltipEl.style.display = "block";
+
+              tooltipEl.style.pointerEvents = "none";
+            } else {
+              tooltipEl.style.display = "none";
+            }
+          }
+        },
       },
     },
   };
 
-  return <Line data={chartData} options={options} />;
+  return (
+    <div className="relative">
+      {externalTooltip}
+
+      <Line data={chartData} options={options} />
+    </div>
+  );
 };
 
 export default LineChart;
