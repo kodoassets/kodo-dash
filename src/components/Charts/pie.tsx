@@ -7,63 +7,96 @@ import { Pie } from "react-chartjs-2";
 type Props = {
   labels: string[];
   datasets: ChartDataset<"pie", number[]>[];
+  externalTooltip?: React.ReactNode;
+  onElementSelect?: (selectedElement: any) => void;
 };
 
-const PieChart = ({ labels, datasets }: Props) => {
+const PieChart = ({
+  labels,
+  datasets,
+  externalTooltip,
+  onElementSelect,
+}: Props) => {
   return (
-    <Pie
-      options={{
-        plugins: {
-          datalabels: {
-            color: "#fff",
-            formatter: function (value: number, context: any) {
-              const dataset = context.chart.data.datasets[context.datasetIndex];
-              const total = dataset.data.reduce(
-                (acc: number, val: number) => acc + val,
-                0
-              );
+    <div className="relative">
+      {externalTooltip}
 
-              if (value < 1) {
-                return "";
-              }
+      <Pie
+        options={{
+          plugins: {
+            datalabels: {
+              color: "#fff",
+              formatter: function (value: number, context: any) {
+                const dataset =
+                  context.chart.data.datasets[context.datasetIndex];
+                const total = dataset.data.reduce(
+                  (acc: number, val: number) => acc + val,
+                  0
+                );
 
-              const percentage = Math.round((value / total) * 100);
+                if (value < 1) {
+                  return "";
+                }
 
-              return `${percentage}%`;
+                const percentage = Math.round((value / total) * 100);
+
+                return `${percentage}%`;
+              },
             },
-          },
-          tooltip: {
-            enabled: true,
-            usePointStyle: true,
-          },
-
-          legend: {
-            display: true,
-            align: "start",
-            position: "bottom",
-
-            labels: {
-              padding: 14,
-              boxHeight: 8,
-              useBorderRadius: true,
+            tooltip: {
+              enabled: externalTooltip ? false : true,
               usePointStyle: true,
+              external: (context: {
+                tooltip: { dataPoints: string | any[] };
+              }) => {
+                const tooltipEl = document.getElementById("custom-pie-tooltip");
 
-              color: "#7896A1",
-              font: {
-                size: 14,
-                weight: "400",
-                lineHeight: 1.2,
-                style: "normal",
+                if (tooltipEl) {
+                  if (context.tooltip.dataPoints?.length > 0) {
+                    const { caretX, caretY } = context.tooltip;
+
+                    tooltipEl.style.left = caretX + "px";
+                    tooltipEl.style.top = caretY + "px";
+                    tooltipEl.style.display = "block";
+                    tooltipEl.style.pointerEvents = "none";
+
+                    if (onElementSelect)
+                      onElementSelect(context.tooltip.dataPoints[0]);
+                  } else {
+                    tooltipEl.style.display = "none";
+                  }
+                }
+              },
+            },
+
+            legend: {
+              display: true,
+              align: "start",
+              position: "bottom",
+
+              labels: {
+                padding: 14,
+                boxHeight: 8,
+                useBorderRadius: true,
+                usePointStyle: true,
+
+                color: "#7896A1",
+                font: {
+                  size: 14,
+                  weight: "400",
+                  lineHeight: 1.2,
+                  style: "normal",
+                },
               },
             },
           },
-        },
-      }}
-      data={{
-        labels,
-        datasets,
-      }}
-    />
+        }}
+        data={{
+          labels,
+          datasets,
+        }}
+      />
+    </div>
   );
 };
 

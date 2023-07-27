@@ -10,6 +10,8 @@ export const PaymentsOvertime = () => {
 
   const [selectedPeriod, setSelectedPeriod] = useState(3);
 
+  const [selectedTooltip, setSelectedTooltip] = useState<any>(null);
+
   const [startDate, setStartDate] = useState(
     `${new Date().getFullYear()}-01-01`
   );
@@ -93,27 +95,39 @@ export const PaymentsOvertime = () => {
           </div>
         </div>
         <LineChart
+          onElementSelect={(element: any) => {
+            setSelectedTooltip(element);
+          }}
           externalTooltip={
             <div
               id="custom-tooltip"
               className="absolute bg-gradient-2 p-4 border border-white/20 rounded-2xl backdrop-blur-md"
             >
               <div className="text-center mb-4">
-                <p className="font-light text-sm text-[#7896A1]">Top Methods</p>
-                <p className="font-medium text-xl">Opa</p>
+                <p className="font-medium text-xl">{selectedTooltip?.label}</p>
               </div>
-              {["USDC", "USDT", "BUSD"].map((coin, index) => (
-                <div
-                  className="bg-[#000F14] flex items-center gap-4 w-56 justify-between mt-2 px-3 py-2 rounded-lg"
-                  key={index}
-                >
-                  <div className="flex items-center gap-3">
-                    <div className="bg-[#00AEEF] w-4 h-4 rounded-full" />
-                    <span>{coin}</span>
-                  </div>
-                  <div>OI %</div>
+
+              <div className="bg-[#000F14] flex items-center gap-4 w-56 justify-between mt-2 px-3 py-2 rounded-lg">
+                <span>Received</span>
+                <div className="text-[#00AEEF]">
+                  {selectedTooltip?.formattedValue}
                 </div>
-              ))}
+              </div>
+
+              <div className="bg-[#000F14] flex items-center gap-4 w-56 justify-between mt-2 px-3 py-2 rounded-lg">
+                <span>Paid</span>
+                <div className="text-[#8C393A]">-</div>
+              </div>
+
+              <div
+                className="bg-[#000F14] flex items-center gap-4 w-56 justify-between mt-2 px-3 py-2 rounded-lg"
+                key={"tooltip-item-3"}
+              >
+                <span>Period Result</span>
+                <div className="text-[#0BE683]">
+                  {selectedTooltip?.formattedValue}
+                </div>
+              </div>
             </div>
           }
           data={{

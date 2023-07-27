@@ -7,10 +7,13 @@ import PieChartData from "@/components/DataView/PieChartData";
 import { PaymentsPerCountry } from "@/components/Graphs/payments/PaymentsPerCountry";
 import { AffiliatesComission } from "@/components/Graphs/payments/AffiliatesComission";
 import { PaymentsOvertime } from "@/components/Graphs/payments/PaymentsOvertime";
+import { useState } from "react";
 
 export default function Home() {
   // useAuth(["viewUsers"]);
   const { address } = useAccount();
+
+  const [selectedTooltip, setSelectedTooltip] = useState<any>(null);
 
   const { data } = useQuery(["stats"], {
     queryFn: () =>
@@ -33,7 +36,7 @@ export default function Home() {
       data?.total?.perCoin?.USDT,
       data?.total?.perCoin?.BUSD,
     ],
-    backgroundColor: ["#065F70", "#A314AB", "#1255F1"],
+    backgroundColor: ["#000F14", "#00AEEF", "#4C2D9A"],
   };
 
   const perBlockchain = {
@@ -55,6 +58,54 @@ export default function Home() {
               title="Payment Method"
               datasets={[perCoin]}
               labels={perCoin.labels}
+              onElementSelect={(element: any) => {
+                setSelectedTooltip(element);
+              }}
+              externalTooltip={
+                <div
+                  id="custom-pie-tooltip"
+                  className="absolute bg-gradient-2 p-4 border border-white/20 rounded-2xl backdrop-blur-md"
+                >
+                  <div className="text-center mb-4">
+                    <p className="font-medium text-xl text-[#7896A1]">
+                      {selectedTooltip?.label}
+                    </p>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-8 w-96">
+                    <div>
+                      <p className="text-[#F8F8F8]">Top Countries</p>
+                      <ul className="mt-2">
+                        {data?.totalPerCountry
+                          ?.sort(
+                            (a: any, b: any) =>
+                              b?.perCoin[selectedTooltip?.label] -
+                              a?.perCoin[selectedTooltip?.label]
+                          )
+                          .map((country: any, index: number) => (
+                            <li
+                              key={index}
+                              className="flex gap-8 justify-between"
+                            >
+                              <p className="text-[#F8F8F8] font-light text-sm">
+                                {country?.Country}
+                              </p>
+                              <p className="text-[#F8F8F8] font-light text-sm">
+                                {(
+                                  country?.perCoin[selectedTooltip?.label] || 0
+                                ).toLocaleString()}
+                              </p>
+                            </li>
+                          ))}
+                      </ul>
+                    </div>
+                    <div>
+                      <p className="text-[#F8F8F8]">Networks</p>
+                      <p className="text-[#F8F8F8] font-regular"></p>
+                    </div>
+                  </div>
+                </div>
+              }
             />
             <div className="grid grid-rows-2 gap-6">
               <div className="bg-gradient-2 py-6 px-8 text-white text-start rounded-2xl h-full">

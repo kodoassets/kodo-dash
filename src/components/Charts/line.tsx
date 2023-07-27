@@ -33,10 +33,15 @@ interface LineChartProps {
       }
     ];
   };
-  externalTooltip?: React.ReactNode; // Allow users to pass external tooltip JSX
+  externalTooltip?: React.ReactNode;
+  onElementSelect?: (selectedElement: any) => void;
 }
 
-const LineChart: React.FC<LineChartProps> = ({ data, externalTooltip }) => {
+const LineChart: React.FC<LineChartProps> = ({
+  data,
+  externalTooltip,
+  onElementSelect,
+}) => {
   const chartData = {
     labels: data.labels,
 
@@ -79,24 +84,24 @@ const LineChart: React.FC<LineChartProps> = ({ data, externalTooltip }) => {
       legend: {
         display: false,
       },
+
       tooltip: {
         enabled: externalTooltip ? false : true,
-        position: "nearest",
+
         external: (context: { tooltip: { dataPoints: string | any[] } }) => {
           const tooltipEl = document.getElementById("custom-tooltip");
 
           if (tooltipEl) {
-            if (context.tooltip.dataPoints.length > 0) {
-              const label = context.tooltip.dataPoints[0].label;
-              const value = context.tooltip.dataPoints[0].formattedValue;
+            if (context.tooltip.dataPoints?.length) {
               const { caretX, caretY } = context.tooltip;
 
-              // tooltipEl.innerHTML = `${label}: ${value}`;
               tooltipEl.style.left = caretX + "px";
               tooltipEl.style.top = caretY + "px";
               tooltipEl.style.display = "block";
-
               tooltipEl.style.pointerEvents = "none";
+
+              if (onElementSelect)
+                onElementSelect(context.tooltip.dataPoints[0]);
             } else {
               tooltipEl.style.display = "none";
             }
