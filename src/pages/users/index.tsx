@@ -7,6 +7,10 @@ import ProgressBar from "@/components/ProgressBar";
 import useAuth from "@/core/use-auth";
 import LineChart from "@/components/Charts/line";
 import { PrimaryUsersPerCountryOvertime } from "@/components/Graphs/users/PrimaryUsersPerCountryOvertime";
+import { AffiliatesComission } from "@/components/Graphs/payments/AffiliatesComission";
+import { UsersPerToken } from "@/components/Graphs/users/UsersPerToken";
+import { TokenHolders } from "@/components/Graphs/users/TokenHolders";
+import { UsersOvertime } from "@/components/Graphs/users/UsersOvertime";
 
 export default function Home() {
   // useAuth(["viewUsers"]);
@@ -24,19 +28,9 @@ export default function Home() {
         .then((res) => res.data),
   });
 
-  const getRandomColor = () => {
-    const letters = "0123456789ABCDEF";
-    let color = "#";
-    for (let i = 0; i < 3; i++) {
-      const index = Math.floor(Math.random() * 16);
-      color += letters[index] + letters[index];
-    }
-    return color;
-  };
-
   return (
     <Scaffold title="Users" className="truncate">
-      <main className="grid gap-16">
+      <main className="grid gap-8">
         <div className="flex flex-row flex-basis-[420px] gap-4">
           <DataWithIcon
             label="Total Users"
@@ -59,120 +53,12 @@ export default function Home() {
           />
         </div>
 
+        <UsersOvertime />
         <div className="grid grid-cols-2 gap-6">
-          <div className="grid grid-cols-1">
-            <div className="text-center">
-              <p className="text-white font-light text-sm mb-2">
-                Users per Token
-              </p>
-              <div className="bg-gradient-2 rounded-2xl p-8">
-                {data?.usersPerToken?.map((Data: any) => (
-                  <div key={Data.propertyId} className="flex flex-row mt-4">
-                    <span className="text-white bg-[#00AEEF] rounded-lg p-2 mr-2 text-xs min-w-[90px]">
-                      {Data.tokenSymbol}
-                    </span>
-                    <ProgressBar
-                      className="!h-8 rounded-lg"
-                      progress={
-                        +(
-                          (Data.userWalletCount * 100) /
-                          data.activeUsers
-                        ).toFixed(0)
-                      }
-                      innerLabel={Data.userWalletCount.toString()}
-                    />
-                    <span className="text-[#7896A1] bg-[#000F14] rounded-lg p-2 ml-2 min-w-[60px] text-xs">
-                      {(
-                        (Data.userWalletCount * 100) /
-                        data.activeUsers
-                      ).toFixed(0)}
-                      %
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-          z
+          <UsersPerToken data={data} />
+          <TokenHolders data={data} />
         </div>
         <PrimaryUsersPerCountryOvertime />
-        {/* <div className="bg-gradient-2 py-6 px-8 text-white text-start rounded-2xl h-[400px]">
-          <div className="grid grid-cols-3 mt-4 gap-9">
-            <div className="col-span-1">
-              <table className="w-full font-light">
-                <thead>
-                  <tr>
-                    <th className="text-center pb-4 font-extralight text-sm">
-                      #
-                    </th>
-                    <th className="text-center pb-4 font-extralight text-sm">
-                      COUNTRY
-                    </th>
-                    <th className="text-center pb-4 font-extralight text-sm">
-                      %
-                    </th>
-                    <th className="text-center pb-4 font-extralight text-sm">
-                      AVG. INVEST
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {stats?.totalPerCountry
-                    ?.sort((a: any, b: any) => b.TotalSold - a.TotalSold)
-                    .map((row: any, index: number) => (
-                      <tr
-                        key={row.country}
-                        className="bg-[#000F14] h-7 text-sm"
-                      >
-                        <td className="text-center w-10 bg-[#00AEEF80]">
-                          {index}
-                        </td>
-                        <td className="text-left w-64 px-3 py-2">
-                          <div className={`relative bg-[#000F1480] text-white`}>
-                            <div className="z-[9999] relative pl-2 flex justify-between">
-                              <span>{row.Country}</span>
-                              <span className="text-xs">
-                                {row.TotalSold.toLocaleString()}
-                              </span>
-                            </div>
-                            <div
-                              className={`absolute top-0 left-0 bottom-0 h-full bg-[#00AEEF] z-0`}
-                              style={{
-                                width: `${(row.TotalSold / 1800) * 100}%`,
-                                background: getRandomColor(),
-                              }}
-                            />
-                          </div>
-                        </td>
-                        <td className="text-left px-3">
-                          {Math.round(row.TotalSold / 2000) * 100}%
-                        </td>
-                        <td className="text-left w-32">
-                          $ {row.TotalSold.toLocaleString()}
-                        </td>
-                      </tr>
-                    ))}
-                </tbody>
-              </table>
-            </div>
-            <div className="w-full h-[300px] col-span-2">
-              <LineChart
-                data={{
-                  labels: [
-                    "January",
-                    "February",
-                    "March",
-                    "April",
-                    "May",
-                    "June",
-                  ],
-                  dataset1: [10, 15, 10, 50, 30, 20],
-                  dataset2: [5, 21, 15, 52, 25, 80],
-                }}
-              />
-            </div>
-          </div>
-        </div> */}
       </main>
     </Scaffold>
   );
