@@ -46,9 +46,7 @@ const PieChart = ({
             tooltip: {
               enabled: externalTooltip ? false : true,
               usePointStyle: true,
-              external: (context: {
-                tooltip: { dataPoints: string | any[] };
-              }) => {
+              external: (context: { tooltip: any }) => {
                 const tooltipEl = document.getElementById("custom-pie-tooltip");
 
                 if (tooltipEl) {

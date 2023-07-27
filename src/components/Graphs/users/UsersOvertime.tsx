@@ -1,5 +1,6 @@
 import { PeriodButton } from "@/components/Button/PeriodButton";
 import LineChart from "@/components/Charts/line";
+import { Property } from "@/data/queries/get-properties";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -9,7 +10,7 @@ export const UsersOvertime = () => {
   const { address } = useAccount();
 
   const [selectedPeriod, setSelectedPeriod] = useState(3);
-  const [selectedToken, setSelectedToken] = useState(0);
+  const [selectedToken, setSelectedToken] = useState<null | Property>(null);
 
   const [startDate, setStartDate] = useState(
     `${new Date().getFullYear()}-01-01`
@@ -47,7 +48,7 @@ export const UsersOvertime = () => {
             process.env.NEXT_PUBLIC_API_URL
           }/backoffice/users/timeframes?dateFrom=${startDate}T00:00:00.000Z&dateTo=${endDate}T00:00:00.000Z&frame=${
             periodsList[selectedPeriod].value
-          }${selectedToken === 0 ? "" : `&token=${selectedToken._id}`}`,
+          }${selectedToken === null ? "" : `&token=${selectedToken._id}`}`,
           {
             headers: {
               // "X-signed-message": signedMessage,
@@ -185,11 +186,12 @@ export const UsersOvertime = () => {
               <div className="flex flex-col gap-4 items-center">
                 <span>Token</span>
                 {propertiesData
-                  .filter((property) => property?.status !== "DRAFT")
-                  .map((property, index) => (
+                  .filter((property: Property) => property?.status !== "DRAFT")
+                  .map((property: Property) => (
                     <button
-                      key={index}
+                      key={property._id}
                       className={`${
+                        selectedToken !== null &&
                         selectedToken._id === property._id
                           ? "border-2 border-[#00AEEF] text-white"
                           : "border-2 border-[#7896A1] text-[#7896A1]"
@@ -200,7 +202,10 @@ export const UsersOvertime = () => {
                     >
                       <span
                         className={`w-4 h-4 border rounded-full ${
-                          selectedToken._id === property._id ? "bg-white" : ""
+                          selectedToken !== null &&
+                          selectedToken._id === property._id
+                            ? "bg-white"
+                            : ""
                         }`}
                       />
                       {property?.contract?.tokenSymbol}
@@ -209,17 +214,17 @@ export const UsersOvertime = () => {
 
                 <button
                   className={`${
-                    selectedToken === 0
+                    !selectedToken
                       ? "border-2 border-[#00AEEF] text-white"
                       : "border-2 border-[#7896A1] text-[#7896A1]"
                   } flex items-center gap-3 px-3 py-2 rounded-full text-md`}
                   onClick={() => {
-                    setSelectedToken(0);
+                    setSelectedToken(null);
                   }}
                 >
                   <span
                     className={`w-4 h-4 border rounded-full ${
-                      selectedToken === 0 ? "bg-white" : ""
+                      !selectedToken ? "bg-white" : ""
                     }`}
                   />
                   All

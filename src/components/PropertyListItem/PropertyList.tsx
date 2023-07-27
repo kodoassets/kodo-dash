@@ -39,9 +39,6 @@ export const statusMap: {
 
 const PropertyList = ({ property }: PropertyListItemProps) => {
   const { status } = property;
-  const completedConfigSteps = property.configurationSteps.filter(
-    (step) => step.status === "COMPLETE"
-  );
 
   const propertyStatus = statusMap[status];
 

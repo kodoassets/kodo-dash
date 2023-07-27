@@ -25,13 +25,11 @@ import { Line } from "react-chartjs-2";
 interface LineChartProps {
   data: {
     labels: string[];
-    datasets: [
-      {
-        data: number[];
-        label?: string;
-        backgroundColor?: string;
-      }
-    ];
+    datasets: {
+      data: number[];
+      label?: string;
+      backgroundColor?: string;
+    }[];
   };
   externalTooltip?: React.ReactNode;
   onElementSelect?: (selectedElement: any) => void;
@@ -88,7 +86,7 @@ const LineChart: React.FC<LineChartProps> = ({
       tooltip: {
         enabled: externalTooltip ? false : true,
 
-        external: (context: { tooltip: { dataPoints: string | any[] } }) => {
+        external: (context: any) => {
           const tooltipEl = document.getElementById("custom-tooltip");
 
           if (tooltipEl) {
