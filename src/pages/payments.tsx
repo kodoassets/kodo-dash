@@ -1,5 +1,4 @@
 import Scaffold from "@/components/Scaffold";
-
 import { useAccount } from "wagmi";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
@@ -62,17 +61,14 @@ export default function Home() {
                 setSelectedTooltip(element);
               }}
               externalTooltip={
-                <div
-                  id="custom-pie-tooltip"
-                  className="absolute bg-gradient-2 p-4 border border-white/20 rounded-2xl backdrop-blur-md"
-                >
+                <div className=" bg-gradient-2 p-4 border border-white/20 rounded-2xl backdrop-blur-md">
                   <div className="text-center mb-4">
                     <p className="font-medium text-xl text-[#7896A1]">
                       {selectedTooltip?.label}
                     </p>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-8 w-96">
+                  <div className="grid grid-cols-1 gap-8 w-48">
                     <div>
                       <p className="text-[#F8F8F8]">Top Countries</p>
                       <ul className="mt-2">
@@ -99,10 +95,10 @@ export default function Home() {
                           ))}
                       </ul>
                     </div>
-                    <div>
+                    {/* <div>
                       <p className="text-[#F8F8F8]">Networks</p>
                       <p className="text-[#F8F8F8] font-regular"></p>
-                    </div>
+                    </div> */}
                   </div>
                 </div>
               }

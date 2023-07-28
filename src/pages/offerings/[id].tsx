@@ -43,7 +43,7 @@ export default function Home() {
 
   return (
     <Scaffold title={"Property"} className="truncate" hasPropertySelector>
-      <div className="grid grid-cols-5 flex-wrap gap-8 justify-between">
+      <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-5 flex-wrap gap-8 justify-between">
         <DataWithIcon
           label="Tokens sold"
           value={totalTokensSold?.toLocaleString() || "-"}
@@ -81,7 +81,7 @@ export default function Home() {
         progress={Number(((totalTokensSold / totalSupply) * 100).toFixed(2))}
       />
 
-      <div className="grid grid-cols-4 gap-8">
+      <div className="grid xl:grid-cols-4 gap-8">
         <PieChartData
           title="Payment Method"
           labels={["USDC", "ETHEREUM", "USDT", "POLYGON"]}

@@ -99,10 +99,7 @@ export const PaymentsOvertime = () => {
             setSelectedTooltip(element);
           }}
           externalTooltip={
-            <div
-              id="custom-tooltip"
-              className="absolute bg-gradient-2 p-4 border border-white/20 rounded-2xl backdrop-blur-md"
-            >
+            <div className=" bg-gradient-2 p-4 border border-white/20 rounded-2xl backdrop-blur-md">
               <div className="text-center mb-4">
                 <p className="font-medium text-xl">{selectedTooltip?.label}</p>
               </div>

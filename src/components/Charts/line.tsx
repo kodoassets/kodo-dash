@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useRef } from "react";
 import {
   ArcElement,
   CategoryScale,
@@ -40,9 +40,17 @@ const LineChart: React.FC<LineChartProps> = ({
   externalTooltip,
   onElementSelect,
 }) => {
+  const [selectedElement, setSelectedElement] = useState<any>(null);
+  const [graphUUID] = useState(() =>
+    "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (c) => {
+      const r = (Math.random() * 16) | 0;
+      const v = c === "x" ? r : (r & 0x3) | 0x8;
+      return v.toString(16);
+    })
+  );
+
   const chartData = {
     labels: data.labels,
-
     datasets: data.datasets.map((dataset) => ({
       data: dataset.data,
       label: dataset.label,
@@ -54,9 +62,6 @@ const LineChart: React.FC<LineChartProps> = ({
       pointRadius: 10,
       pointHoverRadius: 15,
     })),
-    interaction: {
-      mode: "index",
-    },
   };
 
   const options = {
@@ -82,24 +87,26 @@ const LineChart: React.FC<LineChartProps> = ({
       legend: {
         display: false,
       },
-
       tooltip: {
         enabled: externalTooltip ? false : true,
-
         external: (context: any) => {
-          const tooltipEl = document.getElementById("custom-tooltip");
+          const tooltipEl = document.getElementById(graphUUID);
 
           if (tooltipEl) {
             if (context.tooltip.dataPoints?.length) {
               const { caretX, caretY } = context.tooltip;
 
-              tooltipEl.style.left = caretX + "px";
-              tooltipEl.style.top = caretY + "px";
+              tooltipEl.style.left = caretX - 120 + "px";
+              tooltipEl.style.top = caretY + 20 + "px";
               tooltipEl.style.display = "block";
-              tooltipEl.style.pointerEvents = "none";
 
-              if (onElementSelect)
+              if (
+                onElementSelect &&
+                selectedElement?.label !== context.tooltip.dataPoints[0].label
+              ) {
+                setSelectedElement(context.tooltip.dataPoints[0]);
                 onElementSelect(context.tooltip.dataPoints[0]);
+              }
             } else {
               tooltipEl.style.display = "none";
             }
@@ -109,11 +116,32 @@ const LineChart: React.FC<LineChartProps> = ({
     },
   };
 
-  return (
-    <div className="relative">
-      {externalTooltip}
+  const chartContainerRef = useRef<HTMLDivElement>(null);
 
-      <Line data={chartData} options={options} />
+  const handleChartMouseLeave = () => {
+    setSelectedElement(null);
+    const tooltipEl = document.getElementById(graphUUID);
+    if (tooltipEl) {
+      tooltipEl.style.display = "none";
+    }
+  };
+
+  return (
+    <div className="relative" ref={chartContainerRef}>
+      {externalTooltip && (
+        <div
+          id={graphUUID}
+          className={`absolute ${!selectedElement ? "hidden" : "block"}`}
+        >
+          {externalTooltip}
+        </div>
+      )}
+
+      <Line
+        data={chartData}
+        options={options}
+        onMouseLeave={handleChartMouseLeave}
+      />
     </div>
   );
 };
