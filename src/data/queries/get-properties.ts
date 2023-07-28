@@ -69,7 +69,7 @@ export interface Property {
   totalTokensSold?: number;
 }
 
-export const getProperties: () => Promise<Property[]> = async () => {
+export const getProperties: () => Promise<any> = async () => {
   const data = await fetch(apiUrl + "/backoffice/properties");
   return data.json();
 };

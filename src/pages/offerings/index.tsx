@@ -1,28 +1,54 @@
+import DropdownButton from "@/components/Button/DropdownButon";
 import PrimaryButton from "@/components/Button/PrimaryButton";
 import DataWithIcon from "@/components/DataView/DataWithIcon";
 import PropertyList from "@/components/PropertyListItem/PropertyList";
 import Scaffold from "@/components/Scaffold";
 import useAuth from "@/core/use-auth";
-import { getProperties } from "@/data/queries/get-properties";
+import { Property, getProperties } from "@/data/queries/get-properties";
 import { useQuery } from "@tanstack/react-query";
 import Router from "next/router";
+import { useEffect, useState } from "react";
 
 const Offerings = () => {
   // useAuth(["viewOfferings"]);
+  const [filteredProperties, setFilteredProperties] = useState<any>();
+
   const { data } = useQuery(["properties"], () => getProperties());
+
+  useEffect(() => {
+    setFilteredProperties(data);
+  }, [data]);
+
+  if (!data) return null;
 
   const totalSupply = !data
     ? 0
     : data?.reduce(
-        (acc, curr) => acc + parseFloat(curr.contract.totalSupply),
+        (acc: number, curr: { contract: { totalSupply: string } }) =>
+          acc + parseFloat(curr.contract.totalSupply),
         0
       );
 
   const avgTokenPrice = !data
     ? 0
-    : data?.reduce((acc, curr) => acc + parseFloat(curr.tokenPriceInUsd), 0) /
-      data?.length;
+    : data?.reduce(
+        (acc: number, curr: { tokenPriceInUsd: string }) =>
+          acc + parseFloat(curr.tokenPriceInUsd),
+        0
+      ) / data?.length;
 
+  const filterByStatus = (value: string) => {
+    if (value !== "all" && data) {
+      const filtered = data.filter(
+        (property: Property) => property.status === value
+      );
+      setFilteredProperties(filtered);
+    }
+
+    if (value === "all" && data) {
+      setFilteredProperties(data);
+    }
+  };
   return (
     <Scaffold title="Offerings">
       <div className="flex items-center justify-between mb-16">
@@ -54,8 +80,24 @@ const Offerings = () => {
           />
         </div>
       </div>
-      <div className="bg-gradient rounded-2xl p-8 text-white">
-        <p className="text-md mb-8">KODO TOKENS</p>
+      <div className="bg-gradient rounded-2xl py-12 px-8 text-white">
+        <div className="flex justify-between mb-16">
+          <p className="text-md">KODO TOKENS</p>
+          <DropdownButton
+            text="Status"
+            items={[
+              { label: "All", value: "all" },
+              { label: "Draft", value: "DRAFT" },
+              { label: "Coming Soon", value: "COMING_SOON" },
+              { label: "Announced", value: "ANNOUNCED" },
+              { label: "Sale", value: "SALE" },
+              { label: "Closed", value: "CLOSED" },
+            ]}
+            onSelect={(value) => {
+              filterByStatus(value);
+            }}
+          />
+        </div>
 
         <table className="w-full font-light">
           <thead>
@@ -82,7 +124,7 @@ const Offerings = () => {
           </thead>
 
           <tbody>
-            {(data || []).map((property) => (
+            {(filteredProperties || []).map((property: Property) => (
               <PropertyList key={property._id} property={property} />
             ))}
           </tbody>
