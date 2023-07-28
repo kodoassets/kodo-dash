@@ -36,7 +36,7 @@ const OfferingStep = ({
   if (!validationResult) return null;
   return (
     <>
-      <Card className="py-8 px-8 mt-4 mr-8 max-w-[640px]">
+      <Card className="py-8 px-8 mt-4 mr-8 !min-w-[560px]">
         <div className="text-center">
           <p className="text-xl font-bold">{index + 1}</p>
           <h2 className="font-bold">{specification.label}</h2>

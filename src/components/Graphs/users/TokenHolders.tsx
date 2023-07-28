@@ -10,10 +10,7 @@ export const TokenHolders = ({ data }: { data: any }) => {
           <p className="text-[#F8F8F8] font-regular">{data?.activeUsers}</p>
         </div>
         <div className="w-full bg-[#000F1480] h-12 mt-4 rounded-lg">
-          <ProgressBar
-            className="!h-12 rounded-lg"
-            progress={(data?.activeUsers / 20) * 100}
-          />
+          <ProgressBar className="!h-12 rounded-lg" progress={100} />
         </div>
       </div>
     </div>
