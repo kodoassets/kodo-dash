@@ -29,8 +29,6 @@ const ReportsStep = ({ property, specification, validationResult }: Props) => {
     reports.every((i) => property.gallery?.includes(i)) &&
     reports.length === property.gallery?.length;
 
-  console.log(reportInput);
-
   return (
     <div className="">
       <p className="mt-4 mb-2">Reports</p>

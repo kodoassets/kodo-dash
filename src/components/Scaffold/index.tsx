@@ -9,7 +9,7 @@ interface Props {
   title: string;
   className?: string;
   hasPropertySelector?: boolean;
-  selectedProperty?: string;
+  selectedProperty?: Property;
   propertyList?: Property[];
 }
 const Scaffold = ({
@@ -17,6 +17,7 @@ const Scaffold = ({
   title,
   className,
   hasPropertySelector,
+  selectedProperty,
 }: Props) => {
   return (
     <>
@@ -42,20 +43,7 @@ const Scaffold = ({
                   alt=""
                   className="mr-8"
                 />
-                Kodo1
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-8 w-8 ml-4"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path
-                    fillRule="evenodd"
-                    clipRule="evenodd"
-                    d="M10.0001 12.5858L15.2929 7.29297L16.7071 8.70718L10.0001 15.4142L3.29297 8.70718L4.70718 7.29297L10.0001 12.5858Z"
-                    fill="currentColor"
-                  />
-                </svg>
+                {selectedProperty?.contract.tokenSymbol}
               </div>
             ) : (
               <h1 className="text-5xl mt-20 font-light">{title}</h1>
