@@ -73,7 +73,10 @@ export const ActiverUsers = ({ property }: { property: Property }) => {
   const handleDateChange = (newStartDate: any, newEndDate: any) => {
     setStartDate(newStartDate);
     setEndDate(newEndDate);
-    refetch();
+
+    setTimeout(() => {
+      refetch();
+    }, 500);
   };
 
   useEffect(() => {
