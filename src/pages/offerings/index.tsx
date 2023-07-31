@@ -13,7 +13,7 @@ const Offerings = () => {
   // useAuth(["viewOfferings"]);
   const [filteredProperties, setFilteredProperties] = useState<any>();
 
-  const { data } = useQuery(["properties"], () => getProperties());
+  const { data } = useQuery(["properties"], () => getProperties(), {});
 
   useEffect(() => {
     setFilteredProperties(data);
@@ -23,19 +23,23 @@ const Offerings = () => {
 
   const totalSupply = !data
     ? 0
-    : data?.reduce(
+    : Array.isArray(data)
+    ? data?.reduce(
         (acc: number, curr: { contract: { totalSupply: string } }) =>
           acc + parseFloat(curr.contract.totalSupply),
         0
-      );
+      )
+    : 0;
 
   const avgTokenPrice = !data
     ? 0
-    : data?.reduce(
+    : Array.isArray(data)
+    ? data?.reduce(
         (acc: number, curr: { tokenPriceInUsd: string }) =>
           acc + parseFloat(curr.tokenPriceInUsd),
         0
-      ) / data?.length;
+      ) / data?.length
+    : 0;
 
   const filterByStatus = (value: string) => {
     if (value !== "all" && data) {
@@ -124,9 +128,10 @@ const Offerings = () => {
           </thead>
 
           <tbody>
-            {(filteredProperties || []).map((property: Property) => (
-              <PropertyList key={property._id} property={property} />
-            ))}
+            {Array.isArray(filteredProperties) &&
+              filteredProperties.map((property: Property) => (
+                <PropertyList key={property._id} property={property} />
+              ))}
           </tbody>
         </table>
       </div>
