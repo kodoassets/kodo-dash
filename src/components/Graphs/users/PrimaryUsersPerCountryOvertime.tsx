@@ -114,7 +114,7 @@ export const PrimaryUsersPerCountryOvertime = () => {
                 <tr key={country} className="h-7 text-sm relative">
                   <td className="text-center w-10 rounded-md p-1">
                     <div className="px-4 py-1  bg-[#00AEEF80] rounded-md">
-                      {index}
+                      {index + 1}
                     </div>
                   </td>
                   <td className="text-left w-48 px-1 py-1">

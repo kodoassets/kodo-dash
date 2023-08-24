@@ -51,8 +51,8 @@ export default function Home() {
     <Scaffold title="Payments" className="truncate">
       <div className="grid gap-8">
         <PaymentsOvertime />
-        <div className="grid grid-cols-4 gap-6">
-          <div className="col-span-2 grid grid-cols-2 gap-6">
+        <div className="grid xl:grid-cols-4 gap-6">
+          <div className="col-span-2 grid xl:grid-cols-2 gap-6">
             <PieChartData
               title="Payment Method"
               datasets={[perCoin]}

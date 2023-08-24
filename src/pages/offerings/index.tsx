@@ -56,7 +56,7 @@ const Offerings = () => {
   return (
     <Scaffold title="Offerings">
       <div className="flex items-center justify-between mb-16">
-        <div className="grid grid-cols-5 flex-wrap gap-8">
+        <div className="flex flex-row flex-basis-[420px] gap-4">
           <DataWithIcon
             label="Total offer"
             value={totalSupply?.toLocaleString() || "-"}

@@ -40,7 +40,7 @@ export default function Home() {
           />
 
           <DataWithIcon
-            label="Average Tokens Both"
+            label="Average tokens per user"
             value={data?.avgTokensPerUser?.toFixed(2) || "-"}
             subtitle={"per user"}
             src="/imgs/token_price.png"
@@ -54,7 +54,7 @@ export default function Home() {
         </div>
 
         <UsersOvertime />
-        <div className="grid grid-cols-2 gap-6">
+        <div className="grid xl:grid-cols-2 gap-6">
           <UsersPerToken data={data} />
           <TokenHolders data={data} />
         </div>
